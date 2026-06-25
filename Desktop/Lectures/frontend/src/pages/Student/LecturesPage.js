@@ -112,7 +112,7 @@ function StudentLecturesPage() {
                       return (
                         <a
                           key={m.id}
-                          href={`/${m.file_path}`}
+                          href={`/api/materials/${m.id}/download`}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{

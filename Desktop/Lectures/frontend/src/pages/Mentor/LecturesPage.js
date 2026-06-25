@@ -191,7 +191,7 @@ function LecturesPage() {
                 <span 
                   style={{ flex: 1, wordBreak: 'break-word', color: '#1890ff', cursor: 'pointer', lineHeight: 1.4 }}
                   title={m.file_name}
-                  onClick={() => window.open(`/${m.file_path}`, '_blank')}
+                  onClick={() => window.open(`/api/materials/${m.id}/download`, '_blank')}
                 >
                   {m.file_name}
                 </span>
@@ -303,7 +303,7 @@ function LecturesPage() {
                             <span 
                               style={{ flex: 1, wordBreak: 'break-word', color: '#1890ff', cursor: 'pointer', lineHeight: 1.4 }}
                               title={m.file_name}
-                              onClick={() => window.open(`/${m.file_path}`, '_blank')}
+                              onClick={() => window.open(`/api/materials/${m.id}/download`, '_blank')}
                             >
                               {m.file_name}
                             </span>

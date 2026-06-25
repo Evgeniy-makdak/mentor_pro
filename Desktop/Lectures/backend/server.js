@@ -487,6 +487,19 @@ app.put('/api/lectures/reorder', authenticate, requireMentor, (req, res) => {
   res.json({ success: true });
 });
 
+// ============ Materials (File download) ============
+app.get('/api/materials/:id/download', authenticate, (req, res) => {
+  const material = db.prepare('SELECT * FROM materials WHERE id = ?').get(req.params.id);
+  if (!material) return res.status(404).json({ error: 'Файл не найден' });
+  
+  const filePath = path.join(__dirname, '..', material.file_path);
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: 'Файл не найден на сервере' });
+  }
+  
+  res.sendFile(filePath);
+});
+
 // ============ Materials (File upload) ============
 app.post('/api/lectures/:lectureId/materials', authenticate, requireMentor, upload.array('files', 20), decodeFileNames, (req, res) => {
   const files = req.files;
