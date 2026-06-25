@@ -41,6 +41,39 @@ npm install
 npm start
 ```
 
+## Деплой
+
+### Frontend (GitHub Pages)
+```bash
+cd frontend
+npm install
+npm run deploy
+```
+
+После деплоя frontend будет доступен по адресу:
+https://evgeniy-makdak.github.io/mentor_pro
+
+**Важно:** После деплоя на GitHub Pages необходимо настроить URL бэкенда:
+
+1. Создайте файл `frontend/.env.production`:
+```env
+REACT_APP_API_URL=https://your-backend-url.com
+```
+
+2. Задеплойте заново:
+```bash
+npm run deploy
+```
+
+### Backend (рекомендуемые хостинги)
+GitHub Pages не поддерживает Node.js backend. Рекомендую деплоить backend на:
+- **Railway** (https://railway.app) - бесплатно, простая настройка
+- **Render** (https://render.com) - есть бесплатный тариф
+- **Heroku** (https://heroku.com) - классический выбор
+- **Vercel** (https://vercel.com) - с некоторыми ограничениями
+
+После деплоя backend обновите `REACT_APP_API_URL` в frontend.
+
 ## Переменные окружения
 
 Создайте файл `.env` в папке `backend`:
