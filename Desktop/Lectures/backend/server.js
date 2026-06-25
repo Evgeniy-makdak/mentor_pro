@@ -271,7 +271,16 @@ app.get('/api/auth/me', authenticate, (req, res) => {
 app.get('/api/disciplines', authenticate, (req, res) => {
   if (req.user.role === 'mentor') {
     const disciplines = db.prepare('SELECT * FROM disciplines ORDER BY id DESC').all();
-    return res.json(disciplines);
+    // Attach groups to each discipline
+    const result = disciplines.map(d => {
+      const groups = db.prepare(`
+        SELECT g.* FROM groups g
+        JOIN group_disciplines gd ON g.id = gd.group_id
+        WHERE gd.discipline_id = ?
+      `).all(d.id);
+      return { ...d, groups };
+    });
+    return res.json(result);
   } else {
     // Student: only disciplines linked to their group
     const user = db.prepare('SELECT group_id FROM users WHERE id = ?').get(req.user.id);
