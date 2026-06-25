@@ -16,7 +16,7 @@ const DB_PATH = process.env.DB_PATH || './database.db';
 
 // Middleware
 app.use(cors({
-  origin: ['https://evgeniy-makdak.github.io', 'http://localhost:3000', 'http://localhost:3001'],
+  origin: ['https://evgeniy-makdak.github.io', 'http://localhost:3000', 'http://localhost:3001', 'http://192.168.161.87:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
