@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: mentor-pro-backend
+    env: node
+    region: frankfurt
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        value: mentor_pro_secret_render_2024
+      - key: DB_PATH
+        value: ./database.db
+      - key: PORT
+        value: 3001
+    disk:
+      name: mentor-pro-db
+      mountPath: /backend
+      sizeGB: 1
