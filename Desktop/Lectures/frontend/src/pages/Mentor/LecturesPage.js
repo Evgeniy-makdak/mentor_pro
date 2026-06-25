@@ -21,7 +21,7 @@ function LecturesPage() {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [uploadFileList, setUploadFileList] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -131,7 +131,7 @@ function LecturesPage() {
 
   const handleUpload = (lecture) => {
     setCurrentLecture(lecture);
-    setUploadFileList([]); // Очищаем список файлов при открытии окна
+    setSelectedFiles([]); // Очищаем выбранные файлы при открытии окна
     setUploadModalVisible(true);
   };
 
@@ -139,36 +139,38 @@ function LecturesPage() {
     navigate(`/mentor/tests/${lecture.test?.id || lecture.id}`);
   };
 
+  const handleFileChange = (info) => {
+    // Сохраняем только новые файлы (с originFileObj)
+    const files = info.fileList.filter(f => f.originFileObj).map(f => f.originFileObj);
+    setSelectedFiles(files);
+  };
+
+  const handleFileSubmit = async () => {
+    if (selectedFiles.length === 0) {
+      message.warning('Выберите файлы для загрузки');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      await api.uploadMaterials(currentLecture.id, selectedFiles);
+      message.success(`Загружено ${selectedFiles.length} файлов`);
+      setUploadModalVisible(false);
+      setSelectedFiles([]);
+      fetchData(selectedDiscipline);
+    } catch {
+      message.error('Ошибка загрузки файлов');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const uploadProps = {
     multiple: true,
     maxCount: 20,
-    beforeUpload: () => false,
-    fileList: uploadFileList,
-    onChange: (info) => {
-      // Обновляем список файлов в state
-      setUploadFileList(info.fileList);
-    },
-    onSubmit: async () => {
-      // Отправляем только новые файлы (у которых есть originFileObj)
-      const newFiles = uploadFileList.filter(f => f.originFileObj);
-      if (newFiles.length === 0) {
-        message.warning('Выберите файлы для загрузки');
-        return;
-      }
-      
-      setUploading(true);
-      try {
-        await api.uploadMaterials(currentLecture.id, newFiles.map(f => f.originFileObj));
-        message.success('Файлы загружены');
-        setUploadModalVisible(false);
-        setUploadFileList([]);
-        fetchData(selectedDiscipline);
-      } catch {
-        message.error('Ошибка загрузки файлов');
-      } finally {
-        setUploading(false);
-      }
-    }
+    beforeUpload: () => false, // Отменяем автоматическую загрузку
+    onChange: handleFileChange,
+    fileList: [] // Пустой список, чтобы не отображать превью
   };
 
   const columns = [
@@ -364,12 +366,12 @@ function LecturesPage() {
         open={uploadModalVisible}
         onCancel={() => {
           setUploadModalVisible(false);
-          setUploadFileList([]);
+          setSelectedFiles([]);
         }}
         footer={[
           <Button key="cancel" onClick={() => {
             setUploadModalVisible(false);
-            setUploadFileList([]);
+            setSelectedFiles([]);
           }}>
             Отмена
           </Button>,
@@ -377,9 +379,10 @@ function LecturesPage() {
             key="submit" 
             type="primary" 
             loading={uploading}
-            onClick={uploadProps.onSubmit}
+            onClick={handleFileSubmit}
+            disabled={selectedFiles.length === 0}
           >
-            Загрузить файлы
+            Загрузить ({selectedFiles.length})
           </Button>
         ]}
       >
@@ -388,6 +391,25 @@ function LecturesPage() {
           <p>Нажмите или перетащите файлы сюда</p>
           <p style={{ color: '#999', fontSize: 12 }}>PDF, DOC, PPT, ZIP, JPG, PNG, MP4 (макс. 500 МБ)</p>
         </Dragger>
+        
+        {selectedFiles.length > 0 && (
+          <div style={{ marginTop: 16 }}>
+            <Text strong>Выбрано файлов: {selectedFiles.length}</Text>
+            <Space direction="vertical" size="small" style={{ width: '100%', marginTop: 8 }}>
+              {selectedFiles.map((file, index) => (
+                <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
+                  <span>📎</span>
+                  <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {file.name}
+                  </span>
+                  <span style={{ color: '#999', fontSize: 12 }}>
+                    ({(file.size / 1024 / 1024).toFixed(2)} МБ)
+                  </span>
+                </div>
+              ))}
+            </Space>
+          </div>
+        )}
       </Modal>
     </div>
   );
