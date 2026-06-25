@@ -29,6 +29,13 @@ const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 
+// Создаём директорию для загрузок, если не существует
+const uploadsDir = '/backend/uploads';
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log('Created uploads directory:', uploadsDir);
+}
+
 // Create tables
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
@@ -490,11 +497,18 @@ app.put('/api/lectures/reorder', authenticate, requireMentor, (req, res) => {
 // ============ Materials (File download) ============
 app.get('/api/materials/:id/download', (req, res) => {
   const material = db.prepare('SELECT * FROM materials WHERE id = ?').get(req.params.id);
-  if (!material) return res.status(404).json({ error: 'Файл не найден' });
+  if (!material) {
+    console.error('Material not found in DB:', req.params.id);
+    return res.status(404).json({ error: 'Файл не найден' });
+  }
   
   // Путь в БД: uploads/filename.ext, добавляем /backend
   const filePath = '/backend/' + material.file_path;
+  console.log('Looking for file:', filePath);
+  console.log('File exists:', fs.existsSync(filePath));
+  
   if (!fs.existsSync(filePath)) {
+    console.error('File not found on server:', filePath);
     return res.status(404).json({ error: 'Файл не найден на сервере' });
   }
   
