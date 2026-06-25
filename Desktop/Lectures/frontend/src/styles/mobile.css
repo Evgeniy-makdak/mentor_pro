@@ -319,6 +319,93 @@
 }
 
 /* ============================================
+   СТУДЕНТ LAYOUT - МОБИЛЬНАЯ ВЕРСИЯ
+   ============================================ */
+@media screen and (max-width: 768px) {
+  /* Скрываем текст логотипа */
+  .student-logo span {
+    display: none !important;
+  }
+
+  /* Уменьшаем иконку логотипа */
+  .student-logo .anticon {
+    font-size: 28px !important;
+  }
+
+  /* Скрываем текст меню */
+  .student-layout .ant-menu-title-content {
+    display: none !important;
+  }
+
+  /* Увеличиваем иконки меню */
+  .student-layout .ant-menu-item .anticon {
+    font-size: 24px !important;
+    margin: 0 !important;
+  }
+
+  /* Увеличиваем высоту пунктов меню */
+  .student-layout .ant-menu-item {
+    min-height: 64px !important;
+  }
+
+  /* Скрываем имя пользователя в хедере */
+  .student-header span {
+    display: none !important;
+  }
+
+  /* Увеличиваем аватар */
+  .student-header .ant-avatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+/* ============================================
+   STUDENT LECTURES PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .student-lectures-page .ant-collapse-header {
+    padding: 12px 8px !important;
+  }
+
+  .student-lectures-page .ant-collapse-content-box {
+    padding: 12px 8px !important;
+  }
+
+  /* Заголовок "Материалы" */
+  .student-lectures-page .ant-typography strong {
+    display: block !important;
+    margin-bottom: 8px !important;
+    font-size: 15px !important;
+    color: #333 !important;
+  }
+
+  /* Список материалов */
+  .student-lectures-page .ant-space {
+    flex-wrap: wrap !important;
+  }
+
+  .student-lectures-page .ant-space-item {
+    max-width: 100% !important;
+  }
+
+  /* Ссылки на файлы */
+  .student-lectures-page a {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 8px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+
+  /* Кнопка "Перейти к тесту" */
+  .student-lectures-page .ant-btn-primary {
+    width: 100% !important;
+    margin-top: 12px !important;
+  }
+}
+
+/* ============================================
    STUDENTS PAGE
    ============================================ */
 @media screen and (max-width: 768px) {

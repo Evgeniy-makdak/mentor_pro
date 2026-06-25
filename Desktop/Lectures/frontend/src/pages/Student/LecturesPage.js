@@ -105,7 +105,7 @@ function StudentLecturesPage() {
               
               {lecture.materials && lecture.materials.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
-                  <Text strong>Материалы:</Text>
+                  <Text strong style={{ display: 'block', marginBottom: 10, fontSize: 15, color: '#333' }}>Материалы:</Text>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
                     {lecture.materials.map(m => {
                       const { icon, name } = getFileInfo(m);
@@ -118,16 +118,22 @@ function StudentLecturesPage() {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 4,
-                            padding: '4px 12px',
+                            gap: 6,
+                            padding: '8px 12px',
                             background: '#f5f5f5',
-                            borderRadius: 4,
+                            borderRadius: 6,
                             textDecoration: 'none',
                             color: '#333',
-                            fontSize: 13
+                            fontSize: 14,
+                            flex: '1 1 calc(50% - 4px)',
+                            minWidth: 0,
+                            boxSizing: 'border-box'
                           }}
                         >
-                          {icon} {name}
+                          {icon}
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+                            {name}
+                          </span>
                         </a>
                       );
                     })}
