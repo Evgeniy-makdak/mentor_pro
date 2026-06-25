@@ -22,7 +22,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+app.use('/uploads', express.static('/backend/uploads'));
 
 // Database initialization
 const db = new Database(DB_PATH);
@@ -178,7 +178,7 @@ function decodeFileName(filename) {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadDir = path.join(__dirname, '..', 'uploads');
+    const uploadDir = '/backend/uploads';
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -470,7 +470,7 @@ app.delete('/api/lectures/:id', authenticate, requireMentor, (req, res) => {
   // Delete associated files
   const materials = db.prepare('SELECT * FROM materials WHERE lecture_id = ?').all(req.params.id);
   materials.forEach(m => {
-    const filePath = path.join(__dirname, '..', m.file_path);
+    const filePath = path.join('/backend', m.file_path);
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
   });
   db.prepare('DELETE FROM lectures WHERE id = ?').run(req.params.id);
@@ -492,7 +492,7 @@ app.get('/api/materials/:id/download', (req, res) => {
   const material = db.prepare('SELECT * FROM materials WHERE id = ?').get(req.params.id);
   if (!material) return res.status(404).json({ error: 'Файл не найден' });
   
-  const filePath = path.join(__dirname, '..', material.file_path);
+  const filePath = path.join('/backend', material.file_path);
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({ error: 'Файл не найден на сервере' });
   }
@@ -548,7 +548,7 @@ app.post('/api/lectures/:lectureId/materials', authenticate, requireMentor, uplo
 app.delete('/api/materials/:id', authenticate, requireMentor, (req, res) => {
   const material = db.prepare('SELECT * FROM materials WHERE id = ?').get(req.params.id);
   if (material) {
-    const filePath = path.join(__dirname, '..', material.file_path);
+    const filePath = path.join('/backend', material.file_path);
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     db.prepare('DELETE FROM materials WHERE id = ?').run(req.params.id);
   }
