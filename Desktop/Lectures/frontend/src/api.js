@@ -40,8 +40,6 @@ api.interceptors.response.use(
   }
 );
 
-export { getFileUrl };
-
 export default {
   // Auth
   login: (login, password) => api.post('/api/auth/login', { login, password }),
