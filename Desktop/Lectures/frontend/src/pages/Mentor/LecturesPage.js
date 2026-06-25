@@ -21,6 +21,7 @@ function LecturesPage() {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [uploadFileList, setUploadFileList] = useState([]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -130,6 +131,7 @@ function LecturesPage() {
 
   const handleUpload = (lecture) => {
     setCurrentLecture(lecture);
+    setUploadFileList([]); // Очищаем список файлов при открытии окна
     setUploadModalVisible(true);
   };
 
@@ -141,17 +143,25 @@ function LecturesPage() {
     multiple: true,
     maxCount: 20,
     beforeUpload: () => false,
-    fileList: [], // Очищаем fileList при каждом открытии модального окна
-    onChange: async (info) => {
+    fileList: uploadFileList,
+    onChange: (info) => {
+      // Обновляем список файлов в state
+      setUploadFileList(info.fileList);
+    },
+    onSubmit: async () => {
       // Отправляем только новые файлы (у которых есть originFileObj)
-      const newFiles = info.fileList.filter(f => f.originFileObj);
-      if (newFiles.length === 0) return;
+      const newFiles = uploadFileList.filter(f => f.originFileObj);
+      if (newFiles.length === 0) {
+        message.warning('Выберите файлы для загрузки');
+        return;
+      }
       
       setUploading(true);
       try {
         await api.uploadMaterials(currentLecture.id, newFiles.map(f => f.originFileObj));
         message.success('Файлы загружены');
         setUploadModalVisible(false);
+        setUploadFileList([]);
         fetchData(selectedDiscipline);
       } catch {
         message.error('Ошибка загрузки файлов');
@@ -352,8 +362,26 @@ function LecturesPage() {
       <Modal
         title="Загрузка файлов"
         open={uploadModalVisible}
-        onCancel={() => setUploadModalVisible(false)}
-        footer={null}
+        onCancel={() => {
+          setUploadModalVisible(false);
+          setUploadFileList([]);
+        }}
+        footer={[
+          <Button key="cancel" onClick={() => {
+            setUploadModalVisible(false);
+            setUploadFileList([]);
+          }}>
+            Отмена
+          </Button>,
+          <Button 
+            key="submit" 
+            type="primary" 
+            loading={uploading}
+            onClick={uploadProps.onSubmit}
+          >
+            Загрузить файлы
+          </Button>
+        ]}
       >
         <Dragger {...uploadProps} accept=".pdf,.doc,.docx,.ppt,.pptx,.zip,.rar,.jpg,.png,.gif,.mp4,.avi" style={{ marginTop: 16 }}>
           <p className="ant-upload-drag-icon"><InboxOutlined /></p>
