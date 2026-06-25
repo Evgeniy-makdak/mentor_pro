@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Table, Button, Input, Modal, Form, Space, Popconfirm, message, Upload, Typography, Select } from 'antd';
+import { Table, Button, Input, Modal, Form, Space, Popconfirm, message, Upload, Typography, Select, Card, Tag } from 'antd';
 import { PlusOutlined, DeleteOutlined, InboxOutlined, EditOutlined } from '@ant-design/icons';
 import api from '../../api';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Dragger } = Upload;
 
 function LecturesPage() {
@@ -20,6 +20,13 @@ function LecturesPage() {
   const [editingId, setEditingId] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fetchDisciplines = async () => {
     try {
@@ -166,10 +173,10 @@ function LecturesPage() {
         return (
           <Space direction="vertical" size="small" style={{ maxWidth: 400 }}>
             {materials.map(m => (
-              <div key={m.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13 }}>
-                <span style={{ fontSize: 14, flexShrink: 0, marginTop: 2 }}>📎</span>
+              <div key={m.id} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, marginBottom: 4 }}>
+                <span style={{ fontSize: 14, flexShrink: 0 }}>📎</span>
                 <span 
-                  style={{ flex: 1, wordBreak: 'break-word', color: '#1890ff', cursor: 'pointer' }}
+                  style={{ flex: 1, wordBreak: 'break-word', color: '#1890ff', cursor: 'pointer', lineHeight: 1.4 }}
                   title={m.file_name}
                   onClick={() => window.open(`/${m.file_path}`, '_blank')}
                 >
@@ -185,7 +192,7 @@ function LecturesPage() {
                     e.stopPropagation();
                     handleDeleteMaterial(m.id, record.id);
                   }}
-                  style={{ zIndex: 10, flexShrink: 0 }}
+                  style={{ flexShrink: 0 }}
                 />
               </div>
             ))}
@@ -242,16 +249,86 @@ function LecturesPage() {
         </Typography.Text>
       ) : (
         <>
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate} style={{ marginBottom: 16 }}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate} style={{ marginBottom: 16 }} block={isMobile}>
             Добавить лекцию
           </Button>
-          <Table 
-            columns={columns} 
-            dataSource={lectures} 
-            rowKey="id" 
-            loading={loading}
-            pagination={{ pageSize: 20 }} 
-          />
+          
+          {/* Десктоп - таблица */}
+          {!isMobile && (
+            <Table 
+              columns={columns} 
+              dataSource={lectures} 
+              rowKey="id" 
+              loading={loading}
+              pagination={{ pageSize: 20 }} 
+            />
+          )}
+          
+          {/* Мобильные - карточки */}
+          {isMobile && (
+            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+              {lectures.map(lecture => (
+                <Card key={lecture.id} size="small" hoverable>
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 4, wordBreak: 'break-word', lineHeight: 1.4 }}>
+                      {lecture.title}
+                    </div>
+                    {lecture.description && (
+                      <div style={{ color: '#666', fontSize: 13, marginBottom: 8 }}>{lecture.description}</div>
+                    )}
+                    <div style={{ color: '#999', fontSize: 12 }}>№ {lecture.order_index}</div>
+                  </div>
+                  
+                  {/* Материалы */}
+                  {lecture.materials && lecture.materials.length > 0 && (
+                    <div style={{ marginBottom: 12, padding: '8px 0', borderTop: '1px solid #f0f0f0' }}>
+                      <Text type="secondary" style={{ fontSize: 13, display: 'block', marginBottom: 8 }}>Материалы:</Text>
+                      <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                        {lecture.materials.map(m => (
+                          <div key={m.id} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
+                            <span style={{ fontSize: 14 }}>📎</span>
+                            <span 
+                              style={{ flex: 1, wordBreak: 'break-word', color: '#1890ff', cursor: 'pointer', lineHeight: 1.4 }}
+                              title={m.file_name}
+                              onClick={() => window.open(`/${m.file_path}`, '_blank')}
+                            >
+                              {m.file_name}
+                            </span>
+                            <Button 
+                              type="text" 
+                              size="small" 
+                              danger 
+                              icon={<DeleteOutlined />} 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteMaterial(m.id, lecture.id);
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </Space>
+                    </div>
+                  )}
+                  
+                  {/* Тест и действия */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f0f0f0', paddingTop: 12 }}>
+                    <Tag color={lecture.test ? 'green' : 'default'}>
+                      {lecture.test ? '✓ Тест' : '✕ Нет теста'}
+                    </Tag>
+                    <Space>
+                      <Button icon={<InboxOutlined />} size="small" onClick={() => handleUpload(lecture)}>
+                        Загрузить
+                      </Button>
+                      <Button icon={<EditOutlined />} size="small" onClick={() => handleEdit(lecture)} />
+                      <Popconfirm title="Удалить лекцию?" onConfirm={() => handleDelete(lecture.id)}>
+                        <Button icon={<DeleteOutlined />} size="small" danger />
+                      </Popconfirm>
+                    </Space>
+                  </div>
+                </Card>
+              ))}
+            </Space>
+          )}
         </>
       )}
 

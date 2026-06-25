@@ -406,19 +406,38 @@
    REPORTS PAGE
    ============================================ */
 @media screen and (max-width: 768px) {
+  .reports-page .ant-card {
+    margin-bottom: 16px !important;
+  }
+  
   .reports-page .ant-select {
     width: 100% !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 12px !important;
+    min-width: auto !important;
   }
 
   .reports-page .ant-btn {
     width: 100% !important;
-    margin-top: 8px !important;
+    margin-top: 0 !important;
+    min-height: 44px !important;
+  }
+
+  .reports-page .ant-space {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .reports-page .ant-space-item {
+    width: 100% !important;
   }
 
   /* Карточки отчётов */
   .report-card .ant-card-body {
     padding: 16px 12px !important;
+  }
+  
+  .reports-page .ant-form-item {
+    margin-bottom: 8px !important;
   }
 }
 
@@ -447,33 +466,59 @@
     top: 20px !important;
     margin: 0 12px !important;
     max-width: calc(100% - 24px) !important;
+    max-height: 85vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .ant-modal-content {
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: 85vh !important;
   }
 
   .ant-modal-body {
     padding: 20px 16px !important;
-    max-height: 60vh !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    flex: 1 !important;
   }
 
   .ant-modal-header {
     padding: 16px !important;
+    flex-shrink: 0 !important;
   }
 
   .ant-modal-footer {
     padding: 12px 16px !important;
     display: flex !important;
-    flex-direction: column-reverse !important;
-    gap: 8px !important;
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    gap: 12px !important;
+    flex-shrink: 0 !important;
+    border-top: 1px solid #f0f0f0 !important;
   }
 
   .ant-modal-footer .ant-btn {
-    width: 100% !important;
+    min-width: 100px !important;
+    padding: 8px 20px !important;
   }
 
   .ant-modal-title {
     font-size: 18px !important;
     line-height: 1.4 !important;
+  }
+  
+  /* Поля ввода в модалках */
+  .ant-modal .ant-form-item {
+    margin-bottom: 16px !important;
+  }
+  
+  .ant-modal .ant-input,
+  .ant-modal .ant-select-selector,
+  .ant-modal .ant-input-textarea {
+    min-height: 44px !important;
+    font-size: 15px !important;
   }
 }
 
@@ -536,12 +581,14 @@
 @media screen and (max-width: 768px) {
   .ant-card {
     border-radius: 12px !important;
+    margin-bottom: 12px !important;
   }
 
   .ant-card-head {
     padding: 14px 16px !important;
     font-size: 16px !important;
     min-height: auto !important;
+    border-bottom: 1px solid #f0f0f0 !important;
   }
 
   .ant-card-body {
@@ -551,6 +598,7 @@
   .ant-card-head-title {
     font-size: 16px !important;
     line-height: 1.4 !important;
+    font-weight: 600 !important;
   }
 }
 
@@ -632,6 +680,23 @@
 
   .ant-table-tbody .ant-space .ant-btn {
     flex-shrink: 0 !important;
+  }
+}
+
+/* ============================================
+   КНОПКИ В КАРТОЧКАХ
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-card .ant-space {
+    width: 100% !important;
+  }
+  
+  .ant-card .ant-space-item {
+    width: auto !important;
+  }
+  
+  .ant-card .ant-btn {
+    min-height: 40px !important;
   }
 }
 

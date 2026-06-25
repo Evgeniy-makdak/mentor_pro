@@ -13,6 +13,13 @@ function ReportsPage() {
   const [report, setReport] = useState([]);
   const [matrix, setMatrix] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -78,12 +85,14 @@ function ReportsPage() {
 
       <Card style={{ marginBottom: 16 }}>
         <Title level={5}>Отчёт по группе</Title>
-        <Space>
-          <Select placeholder="Выберите группу" style={{ width: 250 }}
+        <Space direction={isMobile ? 'vertical' : 'horizontal'} style={{ width: '100%' }}>
+          <Select 
+            placeholder="Выберите группу" 
+            style={{ width: isMobile ? '100%' : 250 }}
             value={selectedGroup} onChange={setSelectedGroup}
             options={groups.map(g => ({ value: g.id, label: g.name }))}
           />
-          <Button type="primary" onClick={handleGroupReport} loading={loading}>
+          <Button type="primary" onClick={handleGroupReport} loading={loading} block={isMobile}>
             Сформировать
           </Button>
         </Space>
@@ -91,15 +100,17 @@ function ReportsPage() {
 
       <Card style={{ marginBottom: 16 }}>
         <Title level={5}>Отчёт по дисциплине (матрица успеваемости)</Title>
-        <Space>
-          <Select placeholder="Выберите дисциплину" style={{ width: 250 }}
+        <Space direction={isMobile ? 'vertical' : 'horizontal'} style={{ width: '100%' }}>
+          <Select 
+            placeholder="Выберите дисциплину" 
+            style={{ width: isMobile ? '100%' : 250 }}
             value={selectedDiscipline} onChange={setSelectedDiscipline}
             options={disciplines.map(d => ({ value: d.id, label: d.name }))}
           />
-          <Button type="primary" onClick={handleDisciplineReport} loading={loading}>
+          <Button type="primary" onClick={handleDisciplineReport} loading={loading} block={isMobile}>
             Сформировать
           </Button>
-          <Button icon={<DownloadOutlined />} onClick={handleExport}>
+          <Button icon={<DownloadOutlined />} onClick={handleExport} block={isMobile}>
             Экспорт CSV
           </Button>
         </Space>
