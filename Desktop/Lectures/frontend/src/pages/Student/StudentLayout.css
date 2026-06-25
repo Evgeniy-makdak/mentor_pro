@@ -1,0 +1,24 @@
+.student-layout {
+  min-height: 100vh;
+}
+
+.student-layout .ant-layout-sider {
+  background: #001529 !important;
+}
+
+.student-logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 16px;
+}
+
+.student-header {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
