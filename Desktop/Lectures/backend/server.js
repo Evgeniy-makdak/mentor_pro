@@ -488,7 +488,7 @@ app.put('/api/lectures/reorder', authenticate, requireMentor, (req, res) => {
 });
 
 // ============ Materials (File download) ============
-app.get('/api/materials/:id/download', authenticate, (req, res) => {
+app.get('/api/materials/:id/download', (req, res) => {
   const material = db.prepare('SELECT * FROM materials WHERE id = ?').get(req.params.id);
   if (!material) return res.status(404).json({ error: 'Файл не найден' });
   
@@ -497,6 +497,28 @@ app.get('/api/materials/:id/download', authenticate, (req, res) => {
     return res.status(404).json({ error: 'Файл не найден на сервере' });
   }
   
+  // Определяем MIME тип
+  const ext = path.extname(filePath).toLowerCase();
+  const mimeTypes = {
+    '.pdf': 'application/pdf',
+    '.doc': 'application/msword',
+    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    '.ppt': 'application/vnd.ms-powerpoint',
+    '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    '.xls': 'application/vnd.ms-excel',
+    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.gif': 'image/gif',
+    '.mp4': 'video/mp4',
+    '.avi': 'video/x-msvideo',
+    '.zip': 'application/zip',
+    '.rar': 'application/x-rar-compressed'
+  };
+  
+  res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+  res.setHeader('Content-Disposition', `attachment; filename="${material.file_name}"`);
   res.sendFile(filePath);
 });
 

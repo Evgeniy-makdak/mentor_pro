@@ -1,11 +1,7 @@
 import axios from 'axios';
 
-// Для GitHub Pages используем относительный путь или переменную окружения
-const API_URL = process.env.REACT_APP_API_URL || (
-  process.env.NODE_ENV === 'production' 
-    ? window.location.origin.replace('mentor_pro', 'backend') // Будет заменено на реальный URL
-    : 'http://localhost:3001'
-);
+// Принудительно задаём API URL для Railway
+const API_URL = 'https://mentorpro-production.up.railway.app';
 
 // Функция для получения полного URL файла
 export const getFileUrl = (filePath) => {
