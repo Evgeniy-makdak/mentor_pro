@@ -17,6 +17,24 @@
   font-weight: bold;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0 16px;
+  overflow: hidden;
+}
+
+.mentor-logo .logo-text {
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+/* На мобильных скрываем текст логотипа */
+@media screen and (max-width: 768px) {
+  .mentor-logo .logo-text {
+    display: none;
+  }
+  
+  .mentor-logo {
+    justify-content: center;
+    padding: 0;
+  }
 }
 
 .mentor-header {
@@ -35,11 +53,18 @@
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
-    padding: 0 8px;
+    padding: 0 12px;
     z-index: 999;
     overflow-x: auto;
+    overflow-y: hidden;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .mobile-nav-footer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
   }
 
   .mobile-nav-item {
@@ -52,14 +77,22 @@
     cursor: pointer;
     transition: all 0.2s;
     flex-shrink: 0;
+    user-select: none;
+  }
+
+  .mobile-nav-item:active {
+    opacity: 0.7;
+    transform: scale(0.95);
   }
 
   .mobile-nav-item.active {
     background: #1890ff;
     color: #fff;
+    font-weight: 500;
   }
 
   .mentor-layout .ant-layout-content {
     margin-bottom: 56px !important;
+    padding-bottom: 64px !important;
   }
 }

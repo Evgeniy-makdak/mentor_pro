@@ -100,18 +100,22 @@ function GroupsPage() {
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           {groups.map(group => (
             <Card key={group.id} size="small" hoverable>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontWeight: 'bold', fontSize: 16 }}>{group.name}</div>
-                  <div style={{ color: '#999', fontSize: 12 }}>ID: {group.id}</div>
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 4, wordBreak: 'break-word', lineHeight: 1.4 }}>
+                  {group.name}
                 </div>
-                <Space>
-                  <Button icon={<EditOutlined />} size="small" onClick={() => handleEdit(group)} />
-                  <Popconfirm title="Удалить группу?" onConfirm={() => handleDelete(group.id)}>
-                    <Button icon={<DeleteOutlined />} size="small" danger />
-                  </Popconfirm>
-                </Space>
+                <div style={{ color: '#999', fontSize: 12 }}>ID: {group.id}</div>
               </div>
+              <Space style={{ width: '100%', justifyContent: 'flex-end', borderTop: '1px solid #f0f0f0', paddingTop: 12 }}>
+                <Button icon={<EditOutlined />} size="small" onClick={() => handleEdit(group)}>
+                  ✏️
+                </Button>
+                <Popconfirm title="Удалить группу?" onConfirm={() => handleDelete(group.id)}>
+                  <Button icon={<DeleteOutlined />} size="small" danger>
+                    🗑️
+                  </Button>
+                </Popconfirm>
+              </Space>
             </Card>
           ))}
         </Space>

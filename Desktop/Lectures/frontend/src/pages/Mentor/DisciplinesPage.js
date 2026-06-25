@@ -169,20 +169,13 @@ function DisciplinesPage() {
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           {disciplines.map(discipline => (
             <Card key={discipline.id} size="small" hoverable>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-                <div style={{ flex: 1 }}>
-                  <Text strong style={{ fontSize: 16 }}>{discipline.name}</Text>
-                  <div style={{ color: '#999', fontSize: 12 }}>ID: {discipline.id}</div>
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ fontWeight: 'bold', fontSize: 15, marginBottom: 4, wordBreak: 'break-word', lineHeight: 1.4 }}>
+                  {discipline.name}
                 </div>
-                <Space>
-                  <Button icon={<EditOutlined />} size="small" onClick={() => handleEdit(discipline)} />
-                  <Button icon={<LinkOutlined />} size="small" onClick={() => handleLink(discipline.id)} />
-                  <Popconfirm title="Удалить дисциплину?" onConfirm={() => handleDelete(discipline.id)}>
-                    <Button icon={<DeleteOutlined />} size="small" danger />
-                  </Popconfirm>
-                </Space>
+                <div style={{ color: '#999', fontSize: 12 }}>ID: {discipline.id}</div>
               </div>
-              <div>
+              <div style={{ marginBottom: 12 }}>
                 <Text type="secondary" style={{ fontSize: 13 }}>Группы: </Text>
                 <Space size="small" wrap>
                   {discipline.groups && discipline.groups.length > 0 ? (
@@ -196,6 +189,19 @@ function DisciplinesPage() {
                   )}
                 </Space>
               </div>
+              <Space style={{ width: '100%', justifyContent: 'flex-end', borderTop: '1px solid #f0f0f0', paddingTop: 12 }}>
+                <Button icon={<EditOutlined />} size="small" onClick={() => handleEdit(discipline)}>
+                  ✏️
+                </Button>
+                <Button icon={<LinkOutlined />} size="small" onClick={() => handleLink(discipline.id)}>
+                  🔗
+                </Button>
+                <Popconfirm title="Удалить дисциплину?" onConfirm={() => handleDelete(discipline.id)}>
+                  <Button icon={<DeleteOutlined />} size="small" danger>
+                    🗑️
+                  </Button>
+                </Popconfirm>
+              </Space>
             </Card>
           ))}
         </Space>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { Layout, Menu, Avatar, Button, Dropdown, Drawer } from 'antd';
 import {
@@ -25,7 +25,28 @@ function MentorLayout() {
   const location = useLocation();
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isMobile = window.innerWidth <= 768;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Автопрокрутка нижней навигации к активной вкладке
+  useEffect(() => {
+    if (isMobile && navFooterRef.current) {
+      const activeElement = navFooterRef.current.querySelector('.mobile-nav-item.active');
+      if (activeElement) {
+        activeElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'nearest', 
+          inline: 'center' 
+        });
+      }
+    }
+  }, [location.pathname, isMobile]);
+  const navFooterRef = useRef(null);
 
   const menuItems = [
     {
@@ -107,7 +128,7 @@ function MentorLayout() {
       <Sider collapsible width={200} collapsedWidth={64}>
         <div className="mentor-logo">
           <BookOutlined style={{ fontSize: 24, color: '#fff' }} />
-          <span>Mentor Pro</span>
+          <span className="logo-text">Mentor Pro</span>
         </div>
         <Menu
           theme="dark"
@@ -143,7 +164,7 @@ function MentorLayout() {
         
         {/* Нижняя навигация для мобильных */}
         {isMobile && (
-          <div className="mobile-nav-footer">
+          <div className="mobile-nav-footer" ref={navFooterRef}>
             {menuItems.map(item => (
               <div
                 key={item.key}
