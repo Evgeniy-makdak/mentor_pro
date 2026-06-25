@@ -141,6 +141,7 @@ function LecturesPage() {
     multiple: true,
     maxCount: 20,
     beforeUpload: () => false,
+    fileList: [], // Очищаем fileList при каждом открытии модального окна
     onChange: async (info) => {
       // Отправляем только новые файлы (у которых есть originFileObj)
       const newFiles = info.fileList.filter(f => f.originFileObj);
