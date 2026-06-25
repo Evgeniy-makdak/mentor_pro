@@ -103,7 +103,7 @@ function StudentsPage() {
   ];
 
   return (
-    <div>
+    <div className="students-page">
       <h2>Студенты</h2>
       <Space style={{ marginBottom: 16 }}>
         <Select

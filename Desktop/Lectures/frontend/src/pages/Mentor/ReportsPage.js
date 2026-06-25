@@ -73,7 +73,7 @@ function ReportsPage() {
   };
 
   return (
-    <div>
+    <div className="reports-page">
       <Title level={4}>Отчёты</Title>
 
       <Card style={{ marginBottom: 16 }}>

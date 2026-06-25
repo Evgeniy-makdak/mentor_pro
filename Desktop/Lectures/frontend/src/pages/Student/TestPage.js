@@ -75,7 +75,7 @@ function StudentTestPage() {
   const progress = Math.round((answeredCount / questions.length) * 100);
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto' }}>
+    <div className="student-test-page" style={{ maxWidth: 800, margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <Title level={5}>Тест</Title>
         <Text strong style={{ color: timeLeft < 60 ? '#ff4d4f' : '#333' }}>

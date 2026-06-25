@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import MentorLayout from './pages/Mentor/MentorLayout';
@@ -70,6 +71,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
+        <PWAInstallPrompt />
       </AuthProvider>
     </BrowserRouter>
   );

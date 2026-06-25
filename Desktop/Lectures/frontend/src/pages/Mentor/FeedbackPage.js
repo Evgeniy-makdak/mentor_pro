@@ -23,7 +23,7 @@ function FeedbackPage() {
   }, []);
 
   return (
-    <div>
+    <div className="feedback-page">
       <h2>Обратная связь</h2>
       <List
         dataSource={messages}

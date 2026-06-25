@@ -66,7 +66,7 @@ function StudentLecturesPage() {
   };
 
   return (
-    <div>
+    <div className="student-lectures-page">
       <Title level={4}>Лекции</Title>
       {disciplines.length > 0 && (
         <div style={{ marginBottom: 16 }}>

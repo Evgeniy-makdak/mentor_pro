@@ -58,7 +58,7 @@ function Dashboard() {
   ];
 
   return (
-    <div style={{ padding: '0 20px' }}>
+    <div className="dashboard-page" style={{ padding: '0 20px' }}>
       <Title level={3}>Добро пожаловать, {user?.full_name || user?.login}!</Title>
       <Text type="secondary" style={{ display: 'block', marginBottom: 24 }}>
         Роль: {roleLabel}

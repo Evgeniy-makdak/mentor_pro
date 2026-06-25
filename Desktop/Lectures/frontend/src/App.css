@@ -1,3 +1,31 @@
 .App {
   min-height: 100vh;
 }
+
+/* Анимация для PWA Install Prompt */
+@keyframes slideUp {
+  from {
+    transform: translate(-50%, 100%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+/* Улучшение тач-интерфейса для мобильных */
+@media (hover: none) and (pointer: coarse) {
+  .ant-btn,
+  .ant-input,
+  .ant-select,
+  .ant-picker {
+    min-height: 44px;
+  }
+  
+  a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}

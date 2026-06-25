@@ -141,7 +141,7 @@ function DisciplinesPage() {
   ];
 
   return (
-    <div>
+    <div className="disciplines-page">
       <Title level={4}>Дисциплины</Title>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate} style={{ marginBottom: 16 }}>
         Добавить дисциплину

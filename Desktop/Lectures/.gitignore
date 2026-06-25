@@ -34,8 +34,9 @@ Thumbs.db
 frontend/build/
 dist/
 
-# Uploads (optional - uncomment if you don't want to track uploaded files)
-# uploads/
+# Uploads
+uploads/*
+!uploads/.gitkeep
 
 # Temporary files
 tmp/

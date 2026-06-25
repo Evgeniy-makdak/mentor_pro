@@ -1,0 +1,648 @@
+/* ============================================
+   АДАПТИВНЫЕ СТИЛИ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ
+   Mentor Pro - Mobile Responsive Styles
+   ============================================ */
+
+/* Базовые настройки для мобильных */
+@media screen and (max-width: 768px) {
+  /* Убираем отступы у body для мобильных */
+  body {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Разрешаем выделение текста в полях ввода */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+}
+
+/* ============================================
+   ЛОГИН СТРАНИЦА
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .login-page {
+    padding: 20px 16px !important;
+  }
+
+  .login-card {
+    width: 100% !important;
+    margin: 0 auto !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .login-card .ant-card-body {
+    padding: 24px 20px !important;
+  }
+
+  .login-title {
+    font-size: 24px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .login-form .ant-form-item {
+    margin-bottom: 20px !important;
+  }
+
+  .login-form .ant-input {
+    height: 48px !important;
+    font-size: 16px !important;
+    padding: 12px 16px !important;
+  }
+
+  .login-form .ant-btn-primary {
+    height: 48px !important;
+    font-size: 16px !important;
+    margin-top: 8px !important;
+  }
+}
+
+/* ============================================
+   ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ СТРАНИЦ
+   ============================================ */
+@media screen and (max-width: 768px) {
+  /* Уменьшаем отступы контейнеров */
+  .ant-layout-content {
+    padding: 12px !important;
+  }
+
+  /* Заголовки страниц */
+  .ant-typography h4,
+  .ant-typography .ant-typography-h4 {
+    font-size: 20px !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Кнопки */
+  .ant-btn {
+    min-height: 40px !important;
+    padding: 8px 16px !important;
+    font-size: 15px !important;
+  }
+
+  .ant-btn-icon-only {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  /* Поля ввода */
+  .ant-input,
+  .ant-input-textarea,
+  .ant-select-selector,
+  .ant-picker {
+    min-height: 44px !important;
+    font-size: 16px !important;
+    padding: 10px 14px !important;
+  }
+
+  /* Увеличиваем тач-зоны */
+  .ant-btn,
+  .ant-input,
+  .ant-select,
+  .ant-picker,
+  .ant-checkbox,
+  .ant-radio {
+    touch-action: manipulation;
+  }
+}
+
+/* ============================================
+   DASHBOARD
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .dashboard-stats {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .dashboard-stat-card {
+    margin-bottom: 0 !important;
+  }
+
+  .dashboard-stat-card .ant-statistic-title {
+    font-size: 14px !important;
+  }
+
+  .dashboard-stat-card .ant-statistic-content {
+    font-size: 28px !important;
+  }
+
+  /* Таблицы на мобильных */
+  .ant-table-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .ant-table {
+    font-size: 14px !important;
+  }
+
+  .ant-table-thead > tr > th {
+    padding: 12px 8px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+  }
+
+  .ant-table-tbody > tr > td {
+    padding: 12px 8px !important;
+  }
+}
+
+/* ============================================
+   МЕНЮ / SIDEBAR
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-layout-sider {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    z-index: 1000 !important;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .ant-layout-sider-collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+
+  .ant-menu {
+    font-size: 15px !important;
+  }
+
+  .ant-menu-item {
+    min-height: 50px !important;
+    padding: 0 20px !important;
+  }
+
+  .ant-menu-item .anticon {
+    font-size: 20px !important;
+    margin-right: 12px !important;
+  }
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-layout-header {
+    padding: 0 12px !important;
+    height: 56px !important;
+    line-height: 56px !important;
+  }
+
+  .header-user-info {
+    font-size: 14px !important;
+  }
+
+  .header-user-info .ant-avatar {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
+/* ============================================
+   DISCIPLINES PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .disciplines-page .ant-space {
+    width: 100% !important;
+  }
+
+  .disciplines-page .ant-btn-primary {
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+}
+
+/* ============================================
+   GROUPS PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .groups-page .ant-btn-primary {
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+}
+
+/* ============================================
+   STUDENTS PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .students-page .ant-space {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .students-page .ant-space-item {
+    width: 100% !important;
+  }
+
+  .students-page .ant-select {
+    width: 100% !important;
+  }
+
+  .students-page .ant-btn-primary {
+    width: 100% !important;
+  }
+}
+
+/* ============================================
+   LECTURES PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .lectures-page .ant-select {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .lectures-page .ant-btn-primary {
+    width: 100% !important;
+  }
+
+  /* Материалы лекций */
+  .lectures-page .ant-table-column-sorters {
+    padding: 8px 4px !important;
+  }
+
+  /* Кнопки действий в таблицах */
+  .ant-space-compact {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  .ant-space-compact .ant-btn {
+    flex: 1 !important;
+    min-width: 80px !important;
+  }
+}
+
+/* ============================================
+   TEST EDITOR PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .test-editor-page .ant-form-item-label {
+    padding-bottom: 4px !important;
+  }
+
+  .test-editor-page .ant-form-item-label > label {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+  }
+
+  .test-editor-page .question-card {
+    margin-bottom: 16px !important;
+  }
+
+  .test-editor-page .question-card .ant-card-body {
+    padding: 16px 12px !important;
+  }
+
+  .test-editor-page .ant-collapse-header {
+    padding: 12px !important;
+    font-size: 15px !important;
+  }
+
+  .test-editor-page .ant-collapse-content-box {
+    padding: 12px !important;
+  }
+}
+
+/* ============================================
+   REPORTS PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .reports-page .ant-select {
+    width: 100% !important;
+    margin-bottom: 8px !important;
+  }
+
+  .reports-page .ant-btn {
+    width: 100% !important;
+    margin-top: 8px !important;
+  }
+
+  /* Карточки отчётов */
+  .report-card .ant-card-body {
+    padding: 16px 12px !important;
+  }
+}
+
+/* ============================================
+   FEEDBACK PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .feedback-page .ant-list-item {
+    padding: 16px 12px !important;
+  }
+
+  .feedback-page .ant-list-item-meta-title {
+    font-size: 15px !important;
+  }
+
+  .feedback-page .ant-list-item-meta-description {
+    font-size: 13px !important;
+  }
+}
+
+/* ============================================
+   MODALS
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-modal {
+    top: 20px !important;
+    margin: 0 12px !important;
+    max-width: calc(100% - 24px) !important;
+  }
+
+  .ant-modal-body {
+    padding: 20px 16px !important;
+    max-height: 60vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .ant-modal-header {
+    padding: 16px !important;
+  }
+
+  .ant-modal-footer {
+    padding: 12px 16px !important;
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+  }
+
+  .ant-modal-footer .ant-btn {
+    width: 100% !important;
+  }
+
+  .ant-modal-title {
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* ============================================
+   DRAWER (для мобильных меню)
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-drawer-body {
+    padding: 16px !important;
+  }
+}
+
+/* ============================================
+   NOTIFICATIONS / MESSAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-message {
+    max-width: calc(100% - 32px) !important;
+    left: 16px !important;
+    right: 16px !important;
+  }
+
+  .ant-message-notice-content {
+    font-size: 14px !important;
+    padding: 12px 16px !important;
+  }
+
+  .ant-notification {
+    max-width: calc(100% - 16px) !important;
+    margin-right: 8px !important;
+  }
+
+  .ant-notification-notice {
+    font-size: 14px !important;
+    padding: 14px !important;
+  }
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-tabs-nav {
+    margin: 0 0 12px 0 !important;
+  }
+
+  .ant-tabs-tab {
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+  }
+
+  .ant-tabs-tab-btn {
+    padding: 8px 12px !important;
+  }
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-card {
+    border-radius: 12px !important;
+  }
+
+  .ant-card-head {
+    padding: 14px 16px !important;
+    font-size: 16px !important;
+    min-height: auto !important;
+  }
+
+  .ant-card-body {
+    padding: 16px !important;
+  }
+
+  .ant-card-head-title {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-form-item {
+    margin-bottom: 16px !important;
+  }
+
+  .ant-form-item-label {
+    padding-bottom: 6px !important;
+  }
+
+  .ant-form-item-label > label {
+    font-size: 15px !important;
+    line-height: 1.4 !important;
+  }
+
+  .ant-form-item-explain-error {
+    font-size: 13px !important;
+  }
+}
+
+/* ============================================
+   POPOVERS / POPOCONFIRMS
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-popover-inner-content {
+    padding: 12px !important;
+    font-size: 14px !important;
+  }
+
+  .ant-popover-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .ant-popover-buttons .ant-btn {
+    width: 100% !important;
+  }
+}
+
+/* ============================================
+   UPLOAD COMPONENT
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-upload-drag {
+    padding: 24px 16px !important;
+  }
+
+  .ant-upload-drag p.ant-upload-drag-icon {
+    margin-bottom: 12px !important;
+  }
+
+  .ant-upload-drag p.ant-upload-text {
+    font-size: 15px !important;
+  }
+
+  .ant-upload-drag p.ant-upload-hint {
+    font-size: 12px !important;
+  }
+}
+
+/* ============================================
+   TABLE ACTIONS НА МОБИЛЬНЫХ
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-table-tbody > tr > td:last-child {
+    white-space: nowrap !important;
+  }
+
+  .ant-table-tbody .ant-space {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  .ant-table-tbody .ant-space .ant-btn {
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ============================================
+   SPLITTER / RESIZABLE PANELS
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .ant-splitter {
+    flex-direction: column !important;
+  }
+}
+
+/* ============================================
+   SAFE AREA FOR NOTCH DEVICES
+   ============================================ */
+@supports (padding: max(0px)) {
+  @media screen and (max-width: 768px) {
+    body {
+      padding-left: max(0px, env(safe-area-inset-left));
+      padding-right: max(0px, env(safe-area-inset-right));
+      padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
+
+    .ant-layout-header {
+      padding-left: max(12px, env(safe-area-inset-left)) !important;
+      padding-right: max(12px, env(safe-area-inset-right)) !important;
+    }
+
+    .ant-layout-content {
+      padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+    }
+  }
+}
+
+/* ============================================
+   LANDSCAPE MODE FOR MOBILE
+   ============================================ */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .ant-layout-content {
+    max-height: calc(100vh - 56px) !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* ============================================
+   VERY SMALL SCREENS (< 375px)
+   ============================================ */
+@media screen and (max-width: 375px) {
+  .ant-btn {
+    font-size: 14px !important;
+    padding: 6px 12px !important;
+  }
+
+  .ant-input,
+  .ant-select-selector {
+    font-size: 15px !important;
+    padding: 8px 12px !important;
+  }
+
+  .ant-table {
+    font-size: 13px !important;
+  }
+
+  .ant-modal {
+    margin: 0 8px !important;
+    max-width: calc(100% - 16px) !important;
+  }
+}
+
+/* ============================================
+   TABLET (768px - 1024px)
+   ============================================ */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .ant-layout-content {
+    padding: 16px !important;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .ant-modal {
+    max-width: 90% !important;
+    margin: 24px auto !important;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .ant-layout-sider,
+  .ant-layout-header,
+  .ant-btn,
+  .no-print {
+    display: none !important;
+  }
+
+  .ant-layout-content {
+    padding: 0 !important;
+  }
+}

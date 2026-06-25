@@ -51,7 +51,7 @@ function StudentLectureDetailPage() {
   }[testInfo.lastAttempt.grade] : null;
 
   return (
-    <div>
+    <div className="student-lecture-detail-page">
       <Title level={4}>Лекция {lectureId}</Title>
       
       {testInfo.isActive ? (

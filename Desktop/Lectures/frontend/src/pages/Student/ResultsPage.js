@@ -38,7 +38,7 @@ function StudentResultsPage() {
   }[testInfo.lastAttempt.grade] : null;
 
   return (
-    <div>
+    <div className="student-results-page">
       <Button onClick={() => navigate('/student')} style={{ marginBottom: 16 }} icon={<ArrowLeftOutlined />}>
         ← Назад
       </Button>

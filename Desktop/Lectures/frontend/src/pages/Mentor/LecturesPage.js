@@ -216,7 +216,7 @@ function LecturesPage() {
   ];
 
   return (
-    <div>
+    <div className="lectures-page">
       <Title level={4}>Лекции</Title>
       
       <div style={{ marginBottom: 16 }}>

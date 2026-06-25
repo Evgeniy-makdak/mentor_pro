@@ -77,7 +77,7 @@ function GroupsPage() {
   ];
 
   return (
-    <div>
+    <div className="groups-page">
       <h2>Группы</h2>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate} style={{ marginBottom: 16 }}>
         Добавить группу

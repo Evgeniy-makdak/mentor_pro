@@ -297,7 +297,7 @@ function TestEditorPage() {
 
   if (!id) {
     return (
-      <div>
+      <div className="test-editor-page">
         <Title level={4}>Тесты</Title>
         <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/mentor/tests/new')} style={{ marginBottom: 16 }}>
           Создать тест
@@ -334,7 +334,7 @@ function TestEditorPage() {
 
   if (id === 'new') {
     return (
-      <div>
+      <div className="test-editor-page">
         <Button onClick={() => navigate('/mentor/tests')} style={{ marginBottom: 16 }} icon={<ArrowLeftOutlined />}>← Назад</Button>
         <Title level={4}>Создать тест</Title>
         <Card style={{ maxWidth: 500 }}>
@@ -375,7 +375,7 @@ function TestEditorPage() {
   }
 
   return (
-    <div>
+    <div className="test-editor-page">
       <Button onClick={() => navigate('/mentor/tests')} style={{ marginBottom: 16 }} icon={<ArrowLeftOutlined />}>← Назад</Button>
       <Title level={4}>Редактор теста</Title>
       <Card style={{ marginBottom: 16 }}>
