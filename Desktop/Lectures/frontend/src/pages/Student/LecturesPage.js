@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Typography, Button, Empty, Collapse, message } from 'antd';
 import { BookOutlined, FilePdfOutlined, FileImageOutlined, VideoCameraOutlined, FileZipOutlined } from '@ant-design/icons';
-import api from '../../api';
+import api, { getFileUrl } from '../../api';
 
 const { Title, Text } = Typography;
 
@@ -112,7 +112,7 @@ function StudentLecturesPage() {
                       return (
                         <a
                           key={m.id}
-                          href={`/api/materials/${m.id}/download`}
+                          href={getFileUrl(`/api/materials/${m.id}/download`)}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{

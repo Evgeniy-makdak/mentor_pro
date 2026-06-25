@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Table, Button, Input, Modal, Form, Space, Popconfirm, message, Upload, Typography, Select, Card, Tag } from 'antd';
 import { PlusOutlined, DeleteOutlined, InboxOutlined, EditOutlined } from '@ant-design/icons';
-import api from '../../api';
+import api, { getFileUrl } from '../../api';
 
 const { Title, Text } = Typography;
 const { Dragger } = Upload;
@@ -191,7 +191,7 @@ function LecturesPage() {
                 <span 
                   style={{ flex: 1, wordBreak: 'break-word', color: '#1890ff', cursor: 'pointer', lineHeight: 1.4 }}
                   title={m.file_name}
-                  onClick={() => window.open(`/api/materials/${m.id}/download`, '_blank')}
+                  onClick={() => window.open(getFileUrl(`/api/materials/${m.id}/download`), '_blank')}
                 >
                   {m.file_name}
                 </span>
@@ -303,7 +303,7 @@ function LecturesPage() {
                             <span 
                               style={{ flex: 1, wordBreak: 'break-word', color: '#1890ff', cursor: 'pointer', lineHeight: 1.4 }}
                               title={m.file_name}
-                              onClick={() => window.open(`/api/materials/${m.id}/download`, '_blank')}
+                              onClick={() => window.open(getFileUrl(`/api/materials/${m.id}/download`), '_blank')}
                             >
                               {m.file_name}
                             </span>

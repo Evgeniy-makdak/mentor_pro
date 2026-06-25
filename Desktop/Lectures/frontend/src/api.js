@@ -7,6 +7,15 @@ const API_URL = process.env.REACT_APP_API_URL || (
     : 'http://localhost:3001'
 );
 
+// Функция для получения полного URL файла
+export const getFileUrl = (filePath) => {
+  if (!filePath) return '';
+  // Если это уже полный URL, возвращаем как есть
+  if (filePath.startsWith('http')) return filePath;
+  // Иначе добавляем API URL
+  return `${API_URL}${filePath.startsWith('/') ? '' : '/'}${filePath}`;
+};
+
 const api = axios.create({
   baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
@@ -34,6 +43,8 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export { getFileUrl };
 
 export default {
   // Auth
