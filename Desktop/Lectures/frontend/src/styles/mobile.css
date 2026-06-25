@@ -322,7 +322,7 @@
    СТУДЕНТ LAYOUT - МОБИЛЬНАЯ ВЕРСИЯ
    ============================================ */
 @media screen and (max-width: 768px) {
-  /* Скрываем текст логотипа */
+  /* Скрываем текст логотипа Mentor Pro */
   .student-logo span {
     display: none !important;
   }
@@ -364,6 +364,12 @@
    STUDENT LECTURES PAGE
    ============================================ */
 @media screen and (max-width: 768px) {
+  /* Скрываем заголовок "Лекции" на мобильных */
+  .student-lectures-page .ant-typography h4,
+  .student-lectures-page .ant-typography .ant-typography-h4 {
+    display: none !important;
+  }
+
   .student-lectures-page .ant-collapse-header {
     padding: 12px 8px !important;
   }
