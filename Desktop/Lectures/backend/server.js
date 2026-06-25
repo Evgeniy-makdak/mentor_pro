@@ -511,20 +511,43 @@ app.get('/api/materials/:id/download', (req, res) => {
     // Путь в БД: uploads/filename.ext, добавляем /backend
     const filePath = '/backend/' + material.file_path;
     console.log('Full file path:', filePath);
-    console.log('File exists:', fs.existsSync(filePath));
     
+    // Проверка существования файла
     if (!fs.existsSync(filePath)) {
       console.error('File not found on server:', filePath);
       // Список файлов в uploads для отладки
       try {
-        const files = fs.readdirSync('/backend/uploads');
-        console.log('Files in /backend/uploads:', files);
+        if (fs.existsSync('/backend/uploads')) {
+          const files = fs.readdirSync('/backend/uploads');
+          console.log('Files in /backend/uploads:', files);
+          return res.status(404).json({ 
+            error: 'Файл не найден на сервере',
+            debug: {
+              filePath,
+              filesInUploads: files,
+              material
+            }
+          });
+        } else {
+          console.error('Directory /backend/uploads does not exist!');
+          return res.status(500).json({ 
+            error: 'Директория загрузок не существует',
+            debug: {
+              filePath,
+              directoryExists: false
+            }
+          });
+        }
       } catch (e) {
         console.error('Cannot read /backend/uploads:', e.message);
+        return res.status(500).json({ 
+          error: 'Ошибка чтения директории',
+          debug: { error: e.message }
+        });
       }
-      return res.status(404).json({ error: 'Файл не найден на сервере' });
     }
     
+    console.log('File exists, sending...');
     // Определяем MIME тип
     const ext = path.extname(filePath).toLowerCase();
     const mimeTypes = {
@@ -554,6 +577,8 @@ app.get('/api/materials/:id/download', (req, res) => {
         if (!res.headersSent) {
           res.status(500).json({ error: 'Ошибка при отправке файла' });
         }
+      } else {
+        console.log('File sent successfully');
       }
     });
   } catch (error) {
