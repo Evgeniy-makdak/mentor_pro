@@ -496,99 +496,82 @@ app.put('/api/lectures/reorder', authenticate, requireMentor, (req, res) => {
 
 // ============ Materials (File download) ============
 app.get('/api/materials/:id/download', (req, res) => {
-  try {
-    console.log('=== Download request ===');
-    console.log('Material ID:', req.params.id);
-    
-    const material = db.prepare('SELECT * FROM materials WHERE id = ?').get(req.params.id);
-    if (!material) {
-      console.error('Material not found in DB:', req.params.id);
-      return res.status(404).json({ error: 'Файл не найден в базе данных' });
-    }
-    
-    console.log('Material from DB:', material);
-    
-    // Путь в БД: uploads/filename.ext, добавляем /backend
-    const filePath = '/backend/' + material.file_path;
-    console.log('Full file path:', filePath);
-    
-    // Проверка существования файла
-    if (!fs.existsSync(filePath)) {
-      console.error('File not found on server:', filePath);
-      // Список файлов в uploads для отладки
-      try {
-        if (fs.existsSync('/backend/uploads')) {
-          const files = fs.readdirSync('/backend/uploads');
-          console.log('Files in /backend/uploads:', files);
-          return res.status(404).json({ 
-            error: 'Файл не найден на сервере',
-            debug: {
-              filePath,
-              filesInUploads: files,
-              material
-            }
-          });
-        } else {
-          console.error('Directory /backend/uploads does not exist!');
-          return res.status(500).json({ 
-            error: 'Директория загрузок не существует',
-            debug: {
-              filePath,
-              directoryExists: false
-            }
-          });
-        }
-      } catch (e) {
-        console.error('Cannot read /backend/uploads:', e.message);
-        return res.status(500).json({ 
-          error: 'Ошибка чтения директории',
-          debug: { error: e.message }
+  console.log('=== Download request ===');
+  console.log('Material ID:', req.params.id);
+  
+  const material = db.prepare('SELECT * FROM materials WHERE id = ?').get(req.params.id);
+  if (!material) {
+    console.error('Material not found in DB:', req.params.id);
+    return res.status(404).json({ error: 'Файл не найден в базе данных' });
+  }
+  
+  console.log('Material from DB:', material);
+  
+  // Путь в БД: uploads/filename.ext, добавляем /backend
+  const filePath = '/backend/' + material.file_path;
+  console.log('Full file path:', filePath);
+  
+  // Проверка существования файла
+  if (!fs.existsSync(filePath)) {
+    console.error('File not found on server:', filePath);
+    try {
+      if (fs.existsSync('/backend/uploads')) {
+        const files = fs.readdirSync('/backend/uploads');
+        console.log('Files in /backend/uploads:', files);
+        return res.status(404).json({ 
+          error: 'Файл не найден на сервере',
+          filesInUploads: files
         });
-      }
-    }
-    
-    console.log('File exists, sending...');
-    // Определяем MIME тип
-    const ext = path.extname(filePath).toLowerCase();
-    const mimeTypes = {
-      '.pdf': 'application/pdf',
-      '.doc': 'application/msword',
-      '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      '.ppt': 'application/vnd.ms-powerpoint',
-      '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      '.xls': 'application/vnd.ms-excel',
-      '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      '.jpg': 'image/jpeg',
-      '.jpeg': 'image/jpeg',
-      '.png': 'image/png',
-      '.gif': 'image/gif',
-      '.mp4': 'video/mp4',
-      '.avi': 'video/x-msvideo',
-      '.zip': 'application/zip',
-      '.rar': 'application/x-rar-compressed'
-    };
-    
-    console.log('Sending file with MIME type:', mimeTypes[ext] || 'application/octet-stream');
-    res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
-    res.setHeader('Content-Disposition', `attachment; filename="${material.file_name}"`);
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        console.error('Error sending file:', err);
-        if (!res.headersSent) {
-          res.status(500).json({ error: 'Ошибка при отправке файла' });
-        }
       } else {
-        console.log('File sent successfully');
+        console.error('Directory /backend/uploads does not exist!');
+        return res.status(500).json({ error: 'Директория загрузок не существует' });
       }
-    });
-  } catch (error) {
-    console.error('=== Download Error ===');
-    console.error('Error:', error.message);
-    console.error('Stack:', error.stack);
-    if (!res.headersSent) {
-      res.status(500).json({ error: 'Внутренняя ошибка сервера: ' + error.message });
+    } catch (e) {
+      console.error('Cannot read /backend/uploads:', e.message);
+      return res.status(500).json({ error: 'Ошибка чтения директории: ' + e.message });
     }
   }
+  
+  console.log('File exists, sending...');
+  
+  // Определяем MIME тип
+  const ext = path.extname(filePath).toLowerCase();
+  const mimeTypes = {
+    '.pdf': 'application/pdf',
+    '.doc': 'application/msword',
+    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    '.ppt': 'application/vnd.ms-powerpoint',
+    '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    '.xls': 'application/vnd.ms-excel',
+    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.gif': 'image/gif',
+    '.mp4': 'video/mp4',
+    '.avi': 'video/x-msvideo',
+    '.zip': 'application/zip',
+    '.rar': 'application/x-rar-compressed'
+  };
+  
+  // Отправляем файл через pipe
+  res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+  res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(material.file_name)}"`);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  
+  const fileStream = fs.createReadStream(filePath);
+  fileStream.pipe(res);
+  
+  fileStream.on('error', (err) => {
+    console.error('Stream error:', err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Ошибка чтения файла' });
+    }
+  });
+  
+  fileStream.on('end', () => {
+    console.log('File sent successfully');
+  });
 });
 
 // ============ Materials (File upload) ============
