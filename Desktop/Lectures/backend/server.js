@@ -15,7 +15,12 @@ const JWT_SECRET = process.env.JWT_SECRET || 'mentor_pro_secret';
 const DB_PATH = process.env.DB_PATH || './database.db';
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://evgeniy-makdak.github.io', 'http://localhost:3000', 'http://localhost:3001'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 

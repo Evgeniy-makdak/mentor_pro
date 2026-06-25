@@ -22,3 +22,44 @@
 .mentor-header {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
+
+/* Мобильная навигация */
+@media screen and (max-width: 768px) {
+  .mobile-nav-footer {
+    position: fixed;
+    bottom: 0;
+    left: 64px;
+    right: 0;
+    height: 56px;
+    background: #fff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    z-index: 999;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-nav-item {
+    padding: 8px 16px;
+    margin-right: 8px;
+    border-radius: 20px;
+    background: #f0f2f5;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .mobile-nav-item.active {
+    background: #1890ff;
+    color: #fff;
+  }
+
+  .mentor-layout .ant-layout-content {
+    margin-bottom: 56px !important;
+  }
+}

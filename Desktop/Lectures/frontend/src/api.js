@@ -1,10 +1,16 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+// Для GitHub Pages используем относительный путь или переменную окружения
+const API_URL = process.env.REACT_APP_API_URL || (
+  process.env.NODE_ENV === 'production' 
+    ? window.location.origin.replace('mentor_pro', 'backend') // Будет заменено на реальный URL
+    : 'http://localhost:3001'
+);
 
 const api = axios.create({
   baseURL: API_URL,
-  headers: { 'Content-Type': 'application/json' }
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: false // Отключаем cookies для CORS
 });
 
 // Add token to requests

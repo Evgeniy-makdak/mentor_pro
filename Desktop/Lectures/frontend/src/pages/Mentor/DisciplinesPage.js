@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Input, Modal, Form, Space, Popconfirm, message, Typography } from 'antd';
+import { Table, Button, Input, Modal, Form, Space, Popconfirm, message, Typography, Card, Tag } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, LinkOutlined, CloseOutlined } from '@ant-design/icons';
 import api from '../../api';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 function DisciplinesPage() {
   const [disciplines, setDisciplines] = useState([]);
@@ -14,6 +14,13 @@ function DisciplinesPage() {
   const [editingId, setEditingId] = useState(null);
   const [linkModalVisible, setLinkModalVisible] = useState(false);
   const [linkDisciplineId, setLinkDisciplineId] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fetchDisciplines = async () => {
     try {
@@ -143,15 +150,56 @@ function DisciplinesPage() {
   return (
     <div className="disciplines-page">
       <Title level={4}>Дисциплины</Title>
-      <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate} style={{ marginBottom: 16 }}>
+      <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate} style={{ marginBottom: 16 }} block={isMobile}>
         Добавить дисциплину
       </Button>
-      <Table
-        columns={columns}
-        dataSource={disciplines}
-        rowKey="id"
-        pagination={{ pageSize: 20 }}
-      />
+      
+      {/* Десктоп - таблица */}
+      {!isMobile && (
+        <Table
+          columns={columns}
+          dataSource={disciplines}
+          rowKey="id"
+          pagination={{ pageSize: 20 }}
+        />
+      )}
+      
+      {/* Мобильные - карточки */}
+      {isMobile && (
+        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+          {disciplines.map(discipline => (
+            <Card key={discipline.id} size="small" hoverable>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                <div style={{ flex: 1 }}>
+                  <Text strong style={{ fontSize: 16 }}>{discipline.name}</Text>
+                  <div style={{ color: '#999', fontSize: 12 }}>ID: {discipline.id}</div>
+                </div>
+                <Space>
+                  <Button icon={<EditOutlined />} size="small" onClick={() => handleEdit(discipline)} />
+                  <Button icon={<LinkOutlined />} size="small" onClick={() => handleLink(discipline.id)} />
+                  <Popconfirm title="Удалить дисциплину?" onConfirm={() => handleDelete(discipline.id)}>
+                    <Button icon={<DeleteOutlined />} size="small" danger />
+                  </Popconfirm>
+                </Space>
+              </div>
+              <div>
+                <Text type="secondary" style={{ fontSize: 13 }}>Группы: </Text>
+                <Space size="small" wrap>
+                  {discipline.groups && discipline.groups.length > 0 ? (
+                    discipline.groups.map(g => (
+                      <Tag key={g.id} closable onClose={() => handleUnlink(g.id)} color="blue">
+                        {g.name}
+                      </Tag>
+                    ))
+                  ) : (
+                    <Text type="secondary" italic>Нет групп</Text>
+                  )}
+                </Space>
+              </div>
+            </Card>
+          ))}
+        </Space>
+      )}
 
       <Modal
         title={editingId ? 'Редактировать дисциплину' : 'Добавить дисциплину'}

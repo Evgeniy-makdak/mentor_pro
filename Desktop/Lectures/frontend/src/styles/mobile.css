@@ -154,35 +154,123 @@
 }
 
 /* ============================================
-   МЕНЮ / SIDEBAR
+   МЕНЮ / SIDEBAR - МОБИЛЬНАЯ ВЕРСИЯ
    ============================================ */
 @media screen and (max-width: 768px) {
   .ant-layout-sider {
+    width: 64px !important;
+    min-width: 64px !important;
+    max-width: 64px !important;
     position: fixed !important;
     left: 0 !important;
     top: 0 !important;
     bottom: 0 !important;
     z-index: 1000 !important;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15) !important;
+    overflow: visible !important;
   }
 
   .ant-layout-sider-collapsed {
-    width: 0 !important;
-    min-width: 0 !important;
+    width: 64px !important;
+    min-width: 64px !important;
   }
 
-  .ant-menu {
-    font-size: 15px !important;
+  /* Скрываем текст меню на мобильных */
+  .ant-menu-item .ant-menu-title-content,
+  .ant-menu-submenu-title .ant-menu-title-content {
+    display: none !important;
   }
 
+  /* Иконки меню */
   .ant-menu-item {
-    min-height: 50px !important;
-    padding: 0 20px !important;
+    min-height: 64px !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
   }
 
   .ant-menu-item .anticon {
-    font-size: 20px !important;
-    margin-right: 12px !important;
+    font-size: 24px !important;
+    margin: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  /* Логотип */
+  .ant-layout-sider-logo {
+    padding: 12px 8px !important;
+    height: 64px !important;
+  }
+
+  .ant-layout-sider-logo img,
+  .ant-layout-sider-logo span {
+    display: none !important;
+  }
+
+  .ant-layout-sider-logo::before {
+    content: '📚';
+    font-size: 28px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Кнопка сворачивания - скрываем */
+  .ant-layout-sider-trigger {
+    display: none !important;
+  }
+
+  /* Основной контент сдвигается */
+  .ant-layout-content {
+    margin-left: 64px !important;
+    padding: 12px !important;
+    padding-bottom: 70px !important; /* Место для нижнего меню */
+  }
+
+  /* Нижнее меню с названиями (footer nav) */
+  .mobile-nav-footer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 64px !important;
+    right: 0 !important;
+    height: 56px !important;
+    background: #fff !important;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 12px !important;
+    z-index: 999 !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  .mobile-nav-item {
+    padding: 8px 16px !important;
+    margin-right: 8px !important;
+    border-radius: 20px !important;
+    background: #f0f2f5 !important;
+    font-size: 14px !important;
+    color: #666 !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+  }
+
+  .mobile-nav-item.active {
+    background: #1890ff !important;
+    color: #fff !important;
+  }
+
+  /* Скрываем хедер на мобильных или делаем компактным */
+  .ant-layout-header {
+    margin-left: 64px !important;
+    padding: 0 12px !important;
+    height: 56px !important;
   }
 }
 

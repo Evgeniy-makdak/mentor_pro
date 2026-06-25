@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Input, Modal, Form, Space, Popconfirm, message, Select } from 'antd';
+import { Table, Button, Input, Modal, Form, Space, Popconfirm, message, Select, Card } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import api from '../../api';
 
@@ -10,6 +10,13 @@ function StudentsPage() {
   const [form] = Form.useForm();
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fetchStudents = async (groupId) => {
     setLoading(true);
@@ -105,19 +112,51 @@ function StudentsPage() {
   return (
     <div className="students-page">
       <h2>Студенты</h2>
-      <Space style={{ marginBottom: 16 }}>
+      <Space direction={isMobile ? 'vertical' : 'horizontal'} style={{ marginBottom: 16, width: '100%' }}>
         <Select
           placeholder="Фильтр по группе"
           allowClear
-          style={{ width: 200 }}
+          style={{ width: isMobile ? '100%' : 200 }}
           onChange={(val) => fetchStudents(val)}
           options={groups.map(g => ({ value: g.id, label: g.name }))}
         />
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate} block={isMobile}>
           Добавить студента
         </Button>
       </Space>
-      <Table columns={columns} dataSource={students} rowKey="id" loading={loading} pagination={{ pageSize: 20 }} />
+      
+      {/* Десктоп - таблица */}
+      {!isMobile && (
+        <Table columns={columns} dataSource={students} rowKey="id" loading={loading} pagination={{ pageSize: 20 }} />
+      )}
+      
+      {/* Мобильные - карточки */}
+      {isMobile && (
+        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+          {students.map(student => (
+            <Card key={student.id} size="small" hoverable>
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 4 }}>{student.full_name}</div>
+                <div style={{ color: '#666', fontSize: 14 }}>📧 {student.email || 'Нет email'}</div>
+                <div style={{ color: '#999', fontSize: 12 }}>👤 {student.login}</div>
+                {student.group_name && (
+                  <div style={{ color: '#1890ff', fontSize: 13, marginTop: 8 }}>📚 {student.group_name}</div>
+                )}
+              </div>
+              <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+                <Button icon={<EditOutlined />} size="small" onClick={() => handleEdit(student)}>
+                  Редактировать
+                </Button>
+                <Popconfirm title="Удалить студента?" onConfirm={() => handleDelete(student.id)}>
+                  <Button icon={<DeleteOutlined />} size="small" danger>
+                    Удалить
+                  </Button>
+                </Popconfirm>
+              </Space>
+            </Card>
+          ))}
+        </Space>
+      )}
 
       <Modal
         title={editingId ? 'Редактировать студента' : 'Добавить студента'}
