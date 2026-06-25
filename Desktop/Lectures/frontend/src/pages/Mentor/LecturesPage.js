@@ -140,9 +140,13 @@ function LecturesPage() {
   };
 
   const handleFileChange = (info) => {
-    // Сохраняем только новые файлы (с originFileObj)
-    const files = info.fileList.filter(f => f.originFileObj).map(f => f.originFileObj);
-    setSelectedFiles(files);
+    // Берём только что добавленные файлы (с originFileObj и без uid в selectedFiles)
+    const newFiles = info.fileList
+      .filter(f => f.originFileObj && !selectedFiles.find(sf => sf.uid === f.uid))
+      .map(f => f.originFileObj);
+    if (newFiles.length > 0) {
+      setSelectedFiles(prev => [...prev, ...newFiles]);
+    }
   };
 
   const handleFileSubmit = async () => {

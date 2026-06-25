@@ -492,7 +492,8 @@ app.get('/api/materials/:id/download', (req, res) => {
   const material = db.prepare('SELECT * FROM materials WHERE id = ?').get(req.params.id);
   if (!material) return res.status(404).json({ error: 'Файл не найден' });
   
-  const filePath = path.join('/backend', material.file_path);
+  // Путь в БД: uploads/filename.ext, добавляем /backend
+  const filePath = '/backend/' + material.file_path;
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({ error: 'Файл не найден на сервере' });
   }
