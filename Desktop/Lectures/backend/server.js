@@ -12,7 +12,7 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'mentor_pro_secret';
-const DB_PATH = process.env.DB_PATH || './database.db';
+const DB_PATH = process.env.DB_PATH || '/backend/database.db';
 
 // Middleware
 app.use(cors({
