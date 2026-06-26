@@ -2,8 +2,13 @@
   min-height: 100vh;
 }
 
-.student-layout .ant-layout-sider {
+.student-layout-sider {
   background: #001529 !important;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  z-index: 999 !important;
 }
 
 .student-logo {
@@ -17,8 +22,57 @@
   font-weight: bold;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0 16px;
+  overflow: hidden;
+}
+
+.student-logo span {
+  white-space: nowrap;
 }
 
 .student-header {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative !important;
+  z-index: 998 !important;
 }
+
+/* Хедер студента - позиционирование иконки пользователя */
+.student-header .ant-dropdown {
+  line-height: inherit;
+}
+
+.student-header > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Мобильные стили */
+@media screen and (max-width: 768px) {
+  .student-layout-sider {
+    width: 64px !important;
+    min-width: 64px !important;
+  }
+
+  .student-logo span {
+    display: none;
+  }
+
+  .student-logo {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .student-header {
+    margin-left: 64px !important;
+  }
+
+  .ant-layout-content {
+    margin-left: 64px !important;
+  }
+
+  .student-mobile-drawer .ant-menu-item {
+    min-height: 56px !important;
+    font-size: 16px !important;
+  }
+}
+

@@ -106,7 +106,7 @@ function StudentLecturesPage() {
               {lecture.materials && lecture.materials.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
                   <Text strong style={{ display: 'block', marginBottom: 10, fontSize: 15, color: '#333' }}>Материалы:</Text>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
+                  <div className="materials-container" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
                     {lecture.materials.map(m => {
                       const { icon, name } = getFileInfo(m);
                       return (
@@ -115,19 +115,21 @@ function StudentLecturesPage() {
                           href={getFileUrl(`/api/materials/${m.id}/download`)}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="material-link"
                           style={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: 6,
-                            padding: '8px 12px',
+                            padding: '10px 14px',
                             background: '#f5f5f5',
-                            borderRadius: 6,
+                            borderRadius: 8,
                             textDecoration: 'none',
                             color: '#333',
                             fontSize: 14,
                             flex: '1 1 calc(50% - 4px)',
-                            minWidth: 0,
-                            boxSizing: 'border-box'
+                            minWidth: '200px',
+                            boxSizing: 'border-box',
+                            transition: 'background 0.2s'
                           }}
                         >
                           {icon}

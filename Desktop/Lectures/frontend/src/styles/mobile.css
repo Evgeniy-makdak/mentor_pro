@@ -320,45 +320,8 @@
 
 /* ============================================
    СТУДЕНТ LAYOUT - МОБИЛЬНАЯ ВЕРСИЯ
+   (Управление через JavaScript в StudentLayout.js)
    ============================================ */
-@media screen and (max-width: 768px) {
-  /* Скрываем текст логотипа Mentor Pro */
-  .student-logo span {
-    display: none !important;
-  }
-
-  /* Уменьшаем иконку логотипа */
-  .student-logo .anticon {
-    font-size: 28px !important;
-  }
-
-  /* Скрываем текст меню */
-  .student-layout .ant-menu-title-content {
-    display: none !important;
-  }
-
-  /* Увеличиваем иконки меню */
-  .student-layout .ant-menu-item .anticon {
-    font-size: 24px !important;
-    margin: 0 !important;
-  }
-
-  /* Увеличиваем высоту пунктов меню */
-  .student-layout .ant-menu-item {
-    min-height: 64px !important;
-  }
-
-  /* Скрываем имя пользователя в хедере */
-  .student-header span {
-    display: none !important;
-  }
-
-  /* Увеличиваем аватар */
-  .student-header .ant-avatar {
-    width: 40px !important;
-    height: 40px !important;
-  }
-}
 
 /* ============================================
    STUDENT LECTURES PAGE
@@ -386,22 +349,42 @@
     color: #333 !important;
   }
 
-  /* Список материалов */
-  .student-lectures-page .ant-space {
-    flex-wrap: wrap !important;
+  /* Контейнер материалов */
+  .student-lectures-page .materials-container {
+    gap: 8px !important;
   }
 
-  .student-lectures-page .ant-space-item {
-    max-width: 100% !important;
-  }
-
-  /* Ссылки на файлы */
-  .student-lectures-page a {
-    display: block !important;
+  /* Ссылки на файлы - адаптивные карточки */
+  .student-lectures-page .material-link {
+    display: flex !important;
     width: 100% !important;
+    max-width: none !important;
     margin-bottom: 8px !important;
-    padding: 8px 12px !important;
+    padding: 12px 14px !important;
     font-size: 14px !important;
+    flex: 1 1 100% !important;
+    box-sizing: border-box !important;
+    min-width: auto !important;
+  }
+
+  /* Иконка в материале */
+  .student-lectures-page .material-link .anticon {
+    font-size: 18px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Название файла */
+  .student-lectures-page .material-link span {
+    font-size: 14px !important;
+    word-break: break-word !important;
+  }
+
+  /* На очень маленьких экранах */
+  @media screen and (max-width: 375px) {
+    .student-lectures-page .material-link {
+      padding: 10px 12px !important;
+      font-size: 13px !important;
+    }
   }
 
   /* Кнопка "Перейти к тесту" */

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import { Layout, Menu, Avatar, Button, Dropdown, Drawer } from 'antd';
+import { Layout, Menu, Avatar, Dropdown } from 'antd';
 import {
   UnorderedListOutlined,
   GroupOutlined,
@@ -11,9 +11,7 @@ import {
   MessageOutlined,
   LogoutOutlined,
   UserOutlined,
-  DashboardOutlined,
-  CloseOutlined,
-  MenuOutlined
+  DashboardOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../../AuthContext';
 import './MentorLayout.css';
@@ -24,7 +22,6 @@ function MentorLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -127,7 +124,7 @@ function MentorLayout() {
     <Layout className="mentor-layout">
       <Sider collapsible width={200} collapsedWidth={64}>
         <div className="mentor-logo">
-          <BookOutlined style={{ fontSize: 24, color: '#fff' }} />
+          {!isMobile && <BookOutlined style={{ fontSize: 24, color: '#fff' }} />}
           <span className="logo-text">Mentor Pro</span>
         </div>
         <Menu
@@ -139,16 +136,7 @@ function MentorLayout() {
         />
       </Sider>
       <Layout>
-        <Header className="mentor-header" style={{ padding: '0 16px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {/* Кнопка меню для мобильных */}
-          <Button 
-            type="text" 
-            icon={<MenuOutlined />} 
-            size="large"
-            onClick={() => setMobileMenuOpen(true)}
-            style={{ display: isMobile ? 'flex' : 'none' }}
-          />
-          <div style={{ flex: 1 }} />
+        <Header className="mentor-header" style={{ padding: '0 16px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           <Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
             <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
               <Avatar icon={<UserOutlined />} style={{ background: '#1890ff' }}>
@@ -176,26 +164,6 @@ function MentorLayout() {
             ))}
           </div>
         )}
-        
-        {/* Drawer меню для мобильных */}
-        <Drawer
-          title="Меню"
-          placement="left"
-          onClose={() => setMobileMenuOpen(false)}
-          open={mobileMenuOpen}
-          width={280}
-        >
-          <Menu
-            theme="light"
-            mode="inline"
-            selectedKeys={[getSelectedKey()]}
-            items={menuItems}
-            onClick={(e) => {
-              handleMenuClick(e);
-              setMobileMenuOpen(false);
-            }}
-          />
-        </Drawer>
       </Layout>
     </Layout>
   );

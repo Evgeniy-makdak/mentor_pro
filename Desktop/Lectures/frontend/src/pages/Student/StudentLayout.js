@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import { Layout, Menu, Avatar, Dropdown } from 'antd';
+import { Layout, Menu, Avatar, Dropdown, Button, Drawer } from 'antd';
 import {
   BookOutlined,
   FileTextOutlined,
   LogoutOutlined,
-  UserOutlined
+  UserOutlined,
+  MenuOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../../AuthContext';
 import './StudentLayout.css';
@@ -16,6 +17,14 @@ function StudentLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const menuItems = [
     {
@@ -45,7 +54,12 @@ function StudentLayout() {
 
   return (
     <Layout className="student-layout">
-      <Sider collapsible>
+      <Sider 
+        collapsible 
+        width={200} 
+        collapsedWidth={64}
+        className="student-layout-sider"
+      >
         <div className="student-logo">
           <BookOutlined style={{ fontSize: 24, color: '#fff' }} />
           <span>Mentor Pro</span>
@@ -59,19 +73,52 @@ function StudentLayout() {
         />
       </Sider>
       <Layout>
-        <Header className="student-header" style={{ padding: '0 24px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <Header className="student-header" style={{ padding: '0 16px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Кнопка меню для мобильных */}
+          {isMobile && (
+            <Button 
+              type="text" 
+              icon={<MenuOutlined />} 
+              size="large"
+              onClick={() => setMobileMenuOpen(true)}
+              style={{ color: '#333', marginRight: 8 }}
+            />
+          )}
+          <div style={{ flex: 1 }} />
           <Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
             <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Avatar icon={<UserOutlined />} style={{ background: '#1890ff' }}>
+              <Avatar icon={<UserOutlined />} style={{ background: '#1890ff', width: 40, height: 40 }}>
                 {user?.full_name?.[0] || user?.login?.[0]}
               </Avatar>
-              <span>{user?.full_name || user?.login}</span>
+              {!isMobile && <span>{user?.full_name || user?.login}</span>}
             </div>
           </Dropdown>
         </Header>
-        <Content style={{ margin: 24, padding: 24, background: '#fff', minHeight: 280 }}>
+        <Content style={{ margin: 12, padding: 16, background: '#fff', minHeight: 280, borderRadius: 8 }}>
           <Outlet />
         </Content>
+        
+        {/* Drawer меню для мобильных */}
+        <Drawer
+          title="Меню"
+          placement="left"
+          onClose={() => setMobileMenuOpen(false)}
+          open={mobileMenuOpen}
+          width={280}
+          className="student-mobile-drawer"
+        >
+          <Menu
+            theme="light"
+            mode="inline"
+            selectedKeys={[location.pathname]}
+            items={menuItems}
+            onClick={(e) => {
+              handleMenuClick(e);
+              setMobileMenuOpen(false);
+            }}
+            style={{ fontSize: 16 }}
+          />
+        </Drawer>
       </Layout>
     </Layout>
   );
