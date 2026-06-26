@@ -1135,12 +1135,26 @@ app.get('/api/feedback', authenticate, (req, res) => {
       ORDER BY f.created_at DESC
     `).all();
   } else {
+    // Студент видит: 1) свои сообщения, 2) ответы ментора ему (где to_user_id = студент)
     feedbacks = db.prepare(`
-      SELECT f.*, u.full_name as from_name
-      FROM feedback f JOIN users u ON f.from_user_id = u.id
-      WHERE f.from_user_id = ? AND f.parent_id IS NULL
+      SELECT f.*, u.full_name as from_name, u.login as from_login
+      FROM feedback f 
+      JOIN users u ON f.from_user_id = u.id
+      WHERE f.parent_id IS NULL AND f.from_user_id = ?
       ORDER BY f.created_at DESC
     `).all(req.user.id);
+    
+    // Добавляем ответы ментора (где to_user_id = студент)
+    const replies = db.prepare(`
+      SELECT f.*, u.full_name as from_name, u.login as from_login
+      FROM feedback f
+      JOIN users u ON f.from_user_id = u.id
+      WHERE f.to_user_id = ? AND f.parent_id IS NOT NULL
+      ORDER BY f.created_at DESC
+    `).all(req.user.id);
+    
+    // Объединяем оригинальные сообщения с ответами
+    feedbacks = [...feedbacks, ...replies];
   }
   res.json(feedbacks);
 });
