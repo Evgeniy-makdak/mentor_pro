@@ -1127,7 +1127,9 @@ app.get('/api/feedback', authenticate, (req, res) => {
   let feedbacks;
   if (req.user.role === 'mentor') {
     feedbacks = db.prepare(`
-      SELECT f.*, u.full_name as from_name, u.login as from_login
+      SELECT f.*, u.full_name as from_name, u.login as from_login,
+        (SELECT fb.message FROM feedback fb WHERE fb.parent_id = f.id ORDER BY fb.created_at DESC LIMIT 1) as reply,
+        (SELECT fb.created_at FROM feedback fb WHERE fb.parent_id = f.id ORDER BY fb.created_at DESC LIMIT 1) as reply_date
       FROM feedback f JOIN users u ON f.from_user_id = u.id
       WHERE f.parent_id IS NULL
       ORDER BY f.created_at DESC
@@ -1143,19 +1145,34 @@ app.get('/api/feedback', authenticate, (req, res) => {
   res.json(feedbacks);
 });
 
-app.post('/api/feedback/:id/reply', authenticate, requireMentor, (req, res) => {
-  const { message } = req.body;
-  const original = db.prepare('SELECT * FROM feedback WHERE id = ?').get(req.params.id);
+// Mark feedback as read
+app.put('/api/feedback/:id/read', authenticate, (req, res) => {
+  console.log('Marking feedback as read:', req.params.id);
+  const feedback = db.prepare('SELECT * FROM feedback WHERE id = ?').get(req.params.id);
+  if (!feedback) return res.status(404).json({ error: 'Сообщение не найдено' });
+  
+  db.prepare('UPDATE feedback SET is_read = 1 WHERE id = ?').run(req.params.id);
+  console.log('Feedback marked as read:', req.params.id);
+  res.json({ success: true });
+});
+
+// Reply to feedback (mentor)
+app.post('/api/feedback/reply', authenticate, requireMentor, (req, res) => {
+  console.log('Reply to feedback:', req.body);
+  const { to_id, to_name, to_login, original_feedback_id, subject, message } = req.body;
+  
+  const original = db.prepare('SELECT * FROM feedback WHERE id = ?').get(original_feedback_id);
   if (!original) return res.status(404).json({ error: 'Сообщение не найдено' });
   
   const result = db.prepare('INSERT INTO feedback (from_user_id, to_user_id, subject, message, parent_id) VALUES (?, ?, ?, ?, ?)').run(
-    req.user.id, original.from_user_id, 'Re: ' + (original.subject || ''), message, original.id
+    req.user.id, to_id || original.from_user_id, subject || 'Re: ' + (original.subject || ''), message, original.id
   );
   const reply = db.prepare('SELECT * FROM feedback WHERE id = ?').get(result.lastInsertRowid);
   
   // Mark original as read
   db.prepare('UPDATE feedback SET is_read = 1 WHERE id = ?').run(original.id);
   
+  console.log('Reply sent:', reply.id);
   res.status(201).json(reply);
 });
 
