@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { List, Card, Typography, Tag, Empty, Button, Modal, Form, Input, message, Badge, Tabs } from 'antd';
 import { useAuth } from '../../AuthContext';
 import api from '../../api';
@@ -16,7 +16,7 @@ function FeedbackPage() {
   const [replyForm] = Form.useForm();
   const { user } = useAuth();
 
-  const fetchConversations = async () => {
+  const fetchConversations = useCallback(async () => {
     try {
       const res = await api.getFeedback();
       // Group by conversation (original message + replies)
@@ -42,13 +42,15 @@ function FeedbackPage() {
         return acc;
       }, {});
       
-      setConversations(Object.values(grouped).sort((a, b) => 
+      const sorted = Object.values(grouped).sort((a, b) => 
         new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at)
-      ));
+      );
+      setConversations(sorted);
+      return sorted;
     } catch {
-      // ignore
+      return [];
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchConversations();
@@ -82,14 +84,17 @@ function FeedbackPage() {
       setReplyModal({ open: false, message: null });
       setReplyingTo(null);
       replyForm.resetFields();
-      setTimeout(() => {
-        fetchConversations();
-        // Если были в режиме просмотра переписки - сбрасываем и возвращаемся к списку
-        if (selectedConversation) {
-          setSelectedConversation(null);
-          setActiveTab('inbox');
+      
+      // Перезагружаем переписки и находим обновлённую
+      setTimeout(async () => {
+        const originalId = values.original_feedback_id;
+        const updatedConvs = await fetchConversations();
+        const updatedConv = updatedConvs.find(c => c.original?.id === originalId);
+        if (updatedConv) {
+          setSelectedConversation(updatedConv);
+          setActiveTab('conversation');
         }
-      }, 300);
+      }, 500);
     } catch (error) {
       console.error('Ошибка отправки ответа:', error);
       const errorMsg = error.response?.data?.error || error.message || 'Ошибка отправки ответа';
