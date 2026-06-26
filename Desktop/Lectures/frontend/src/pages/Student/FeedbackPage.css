@@ -3,12 +3,8 @@
   margin: 0 auto;
 }
 
-.student-feedback-page .ant-tabs {
-  margin-top: 16px;
-}
-
-.conversation-view {
-  max-width: 800px;
+.student-feedback-page .ant-card {
+  padding: 16px;
 }
 
 /* Стили для мобильных */
@@ -36,21 +32,13 @@
     margin-bottom: 12px !important;
   }
 
-  .student-feedback-page .ant-tabs-nav {
-    margin: 0 0 16px 0 !important;
+  .student-feedback-page h5 {
+    font-size: 17px !important;
+    margin-bottom: 16px !important;
   }
 
-  .student-feedback-page .ant-tabs-tab {
-    padding: 8px 12px !important;
-    font-size: 14px !important;
-  }
-
-  .conversation-view .ant-card {
-    padding: 12px !important;
-  }
-
-  .conversation-view .ant-btn {
-    width: 100% !important;
-    margin-bottom: 12px !important;
+  .student-feedback-page .ant-list-item {
+    padding: 8px 0 !important;
   }
 }
+
