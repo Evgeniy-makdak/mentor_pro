@@ -37,6 +37,15 @@ function StudentFeedbackPage() {
 
   const handleReply = async (values) => {
     try {
+      console.log('Отправка ответа студентом:', {
+        to_id: replyingTo.from_user_id,
+        to_name: replyingTo.from_name,
+        to_login: replyingTo.from_login,
+        original_feedback_id: replyingTo.id,
+        subject: `Re: ${replyingTo.subject || 'Без темы'}`,
+        message: values.message
+      });
+      
       setLoading(true);
       await api.replyFeedback({
         to_id: replyingTo.from_user_id,
@@ -52,7 +61,10 @@ function StudentFeedbackPage() {
       replyForm.resetFields();
       setTimeout(() => fetchMessages(), 500);
     } catch (error) {
-      message.error('Ошибка отправки ответа');
+      console.error('Ошибка отправки ответа:', error);
+      console.error('Response data:', error.response?.data);
+      const errorMsg = error.response?.data?.error || error.message || 'Ошибка отправки ответа';
+      message.error(errorMsg);
     } finally {
       setLoading(false);
     }
