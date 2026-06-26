@@ -37,8 +37,17 @@ function StudentFeedbackPage() {
 
   const handleReply = async (values) => {
     try {
+      // Определяем кому отправляем ответ
+      // Если отвечаем на сообщение ментора (from_user_id != наш ID), то отправляем ментору
+      // Если отвечаем на своё сообщение, то отправляем to_user_id оригинала
+      const isMentorMessage = replyingTo.from_user_id !== user?.id;
+      const targetUserId = isMentorMessage ? replyingTo.from_user_id : (replyingTo.to_user_id || replyingTo.from_user_id);
+      
       console.log('Отправка ответа студентом:', {
-        to_id: replyingTo.from_user_id,
+        replyingTo,
+        isMentorMessage,
+        targetUserId,
+        to_id: targetUserId,
         to_name: replyingTo.from_name,
         to_login: replyingTo.from_login,
         original_feedback_id: replyingTo.id,
@@ -48,7 +57,7 @@ function StudentFeedbackPage() {
       
       setLoading(true);
       await api.replyFeedback({
-        to_id: replyingTo.from_user_id,
+        to_id: targetUserId,
         to_name: replyingTo.from_name,
         to_login: replyingTo.from_login,
         original_feedback_id: replyingTo.id,
