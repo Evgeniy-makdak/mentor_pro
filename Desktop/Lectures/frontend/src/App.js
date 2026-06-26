@@ -18,6 +18,7 @@ import StudentLecturesPage from './pages/Student/LecturesPage';
 import StudentLectureDetailPage from './pages/Student/LectureDetailPage';
 import StudentTestPage from './pages/Student/TestPage';
 import StudentResultsPage from './pages/Student/ResultsPage';
+import StudentFeedbackPage from './pages/Student/FeedbackPage';
 import './App.css';
 
 function AppRoutes() {
@@ -59,6 +60,7 @@ function AppRoutes() {
         <Route path="lecture/:lectureId" element={<StudentLectureDetailPage />} />
         <Route path="test" element={<StudentTestPage />} />
         <Route path="results/:lectureId" element={<StudentResultsPage />} />
+        <Route path="feedback" element={<StudentFeedbackPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

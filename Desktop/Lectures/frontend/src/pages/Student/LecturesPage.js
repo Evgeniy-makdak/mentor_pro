@@ -68,12 +68,14 @@ function StudentLecturesPage() {
   return (
     <div className="student-lectures-page">
       <Title level={4}>Лекции</Title>
+      
       {disciplines.length > 0 && (
         <div style={{ marginBottom: 16 }}>
+          <div style={{ marginBottom: 8, fontSize: 15, color: '#666' }}>Дисциплина:</div>
           <select
             value={selectedDiscipline || ''}
             onChange={(e) => handleDisciplineChange(e.target.value || undefined)}
-            style={{ padding: '8px 12px', fontSize: 14, borderRadius: 4, border: '1px solid #d9d9d9', width: 300 }}
+            style={{ padding: '10px 12px', fontSize: 15, borderRadius: 6, border: '1px solid #d9d9d9', width: '100%', maxWidth: 400 }}
           >
             <option value="">Выберите дисциплину</option>
             {disciplines.map(d => (

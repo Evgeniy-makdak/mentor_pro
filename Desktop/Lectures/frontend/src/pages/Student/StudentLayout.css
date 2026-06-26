@@ -74,5 +74,59 @@
     min-height: 56px !important;
     font-size: 16px !important;
   }
+
+  /* Мобильная навигация в футере */
+  .mobile-nav-footer {
+    position: fixed;
+    bottom: 0;
+    left: 64px;
+    right: 0;
+    height: 56px;
+    background: #fff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    z-index: 999;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  .mobile-nav-footer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-nav-item {
+    padding: 8px 16px;
+    margin-right: 8px;
+    border-radius: 20px;
+    background: #f0f2f5;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  .mobile-nav-item:active {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+
+  .mobile-nav-item.active {
+    background: #1890ff;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .student-layout .ant-layout-content {
+    margin-bottom: 56px !important;
+    padding-bottom: 64px !important;
+  }
 }
 

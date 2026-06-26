@@ -324,6 +324,29 @@
    ============================================ */
 
 /* ============================================
+   STUDENT FEEDBACK PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .student-feedback-page .ant-card {
+    padding: 16px !important;
+  }
+
+  .student-feedback-page .ant-form-item-label > label {
+    font-size: 15px !important;
+  }
+
+  .student-feedback-page .ant-input,
+  .student-feedback-page .ant-input-textarea {
+    font-size: 16px !important;
+  }
+
+  .student-feedback-page .ant-btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* ============================================
    STUDENT LECTURES PAGE
    ============================================ */
 @media screen and (max-width: 768px) {

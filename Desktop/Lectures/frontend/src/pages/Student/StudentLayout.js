@@ -6,7 +6,8 @@ import {
   FileTextOutlined,
   LogoutOutlined,
   UserOutlined,
-  MenuOutlined
+  MenuOutlined,
+  MessageOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../../AuthContext';
 import './StudentLayout.css';
@@ -26,7 +27,7 @@ function StudentLayout() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const menuItems = [
+  const studentMenuItems = [
     {
       key: '/student',
       icon: <BookOutlined />,
@@ -36,8 +37,26 @@ function StudentLayout() {
       key: '/student/results',
       icon: <FileTextOutlined />,
       label: 'Результаты'
+    },
+    {
+      key: '/student/feedback',
+      icon: <MessageOutlined />,
+      label: 'Обратная связь'
     }
   ];
+
+  const footerItems = [
+    { key: '/student', label: 'Лекции' },
+    { key: '/student/results', label: 'Результаты' },
+    { key: '/student/feedback', label: 'Обратная связь' }
+  ];
+
+  const getSelectedKey = () => {
+    const path = location.pathname;
+    if (path === '/student' || path === '/student/') return '/student';
+    if (path.startsWith('/student/feedback')) return '/student/feedback';
+    return path;
+  };
 
   const handleMenuClick = (e) => {
     navigate(e.key);
@@ -67,8 +86,8 @@ function StudentLayout() {
         <Menu
           theme="dark"
           mode="inline"
-          selectedKeys={[location.pathname]}
-          items={menuItems}
+          selectedKeys={[getSelectedKey()]}
+          items={studentMenuItems}
           onClick={handleMenuClick}
         />
       </Sider>
@@ -98,6 +117,21 @@ function StudentLayout() {
           <Outlet />
         </Content>
         
+        {/* Нижняя навигация для мобильных */}
+        {isMobile && (
+          <div className="mobile-nav-footer">
+            {footerItems.map(item => (
+              <div
+                key={item.key}
+                className={`mobile-nav-item ${getSelectedKey() === item.key ? 'active' : ''}`}
+                onClick={() => navigate(item.key)}
+              >
+                {item.label}
+              </div>
+            ))}
+          </div>
+        )}
+        
         {/* Drawer меню для мобильных */}
         <Drawer
           title="Меню"
@@ -110,8 +144,8 @@ function StudentLayout() {
           <Menu
             theme="light"
             mode="inline"
-            selectedKeys={[location.pathname]}
-            items={menuItems}
+            selectedKeys={[getSelectedKey()]}
+            items={studentMenuItems}
             onClick={(e) => {
               handleMenuClick(e);
               setMobileMenuOpen(false);
