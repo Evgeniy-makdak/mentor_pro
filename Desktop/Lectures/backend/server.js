@@ -1126,19 +1126,19 @@ app.post('/api/feedback', authenticate, (req, res) => {
 app.get('/api/feedback', authenticate, (req, res) => {
   let feedbacks;
   if (req.user.role === 'mentor') {
+    // Ментор видит ВСЕ сообщения: и оригиналы, и ответы
     feedbacks = db.prepare(`
-      SELECT f.*, u.full_name as from_name, u.login as from_login,
-        (SELECT fb.message FROM feedback fb WHERE fb.parent_id = f.id ORDER BY fb.created_at DESC LIMIT 1) as reply,
-        (SELECT fb.created_at FROM feedback fb WHERE fb.parent_id = f.id ORDER BY fb.created_at DESC LIMIT 1) as reply_date
-      FROM feedback f JOIN users u ON f.from_user_id = u.id
-      WHERE f.parent_id IS NULL
-      ORDER BY f.created_at DESC
-    `).all();
+      SELECT f.*, u.full_name as from_name, u.login as from_login
+      FROM feedback f
+      JOIN users u ON f.from_user_id = u.id
+      WHERE f.to_user_id = ? OR f.from_user_id = ?
+      ORDER BY f.created_at ASC
+    `).all(req.user.id, req.user.id);
   } else {
     // Студент видит ВСЕ сообщения в своей переписке: где он отправитель ИЛИ получатель
     feedbacks = db.prepare(`
       SELECT f.*, u.full_name as from_name, u.login as from_login
-      FROM feedback f 
+      FROM feedback f
       JOIN users u ON f.from_user_id = u.id
       WHERE f.parent_id IS NULL AND (f.from_user_id = ? OR f.to_user_id = ?)
       ORDER BY f.created_at DESC
