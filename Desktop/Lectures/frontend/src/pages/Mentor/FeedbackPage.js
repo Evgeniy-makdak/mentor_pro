@@ -19,25 +19,37 @@ function FeedbackPage() {
   const fetchConversations = useCallback(async () => {
     try {
       const res = await api.getFeedback();
-      // Group by conversation (original message + replies)
+      // Группировка по тредам с поиском корневого сообщения
       const grouped = res.data.reduce((acc, msg) => {
-        const convId = msg.parent_id || msg.id;
-        if (!acc[convId]) {
-          acc[convId] = {
-            id: msg.parent_id || msg.id,
-            original: msg.parent_id ? null : msg,
+        if (!msg.parent_id) {
+          // Это оригинальное сообщение
+          acc[msg.id] = {
+            id: msg.id,
+            original: msg,
             replies: [],
             unread: msg.is_read === 0,
             lastMessage: msg,
             student: { name: msg.from_name, login: msg.from_login, id: msg.from_user_id }
           };
-        }
-        if (msg.parent_id) {
-          acc[convId].replies.push(msg);
-          acc[convId].lastMessage = msg;
-        }
-        if (msg.is_read === 0 && !msg.parent_id) {
-          acc[convId].unread = true;
+        } else {
+          // Это ответ - ищем корневое сообщение
+          let rootId = msg.parent_id;
+          let depth = 0;
+          while (depth < 10) {
+            const parent = res.data.find(m => m.id === rootId);
+            if (!parent || !parent.parent_id) break;
+            rootId = parent.parent_id;
+            depth++;
+          }
+          
+          if (acc[rootId]) {
+            acc[rootId].replies.push(msg);
+            acc[rootId].lastMessage = msg;
+            // Если ответ не прочитан и это не наш ответ (ментора), помечаем как непрочитанный
+            if (msg.is_read === 0 && msg.from_user_id !== user?.id) {
+              acc[rootId].unread = true;
+            }
+          }
         }
         return acc;
       }, {});
@@ -50,7 +62,7 @@ function FeedbackPage() {
     } catch {
       return [];
     }
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
     fetchConversations();
