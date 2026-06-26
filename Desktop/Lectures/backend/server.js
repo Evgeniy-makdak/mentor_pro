@@ -1172,24 +1172,47 @@ app.put('/api/feedback/:id/read', authenticate, (req, res) => {
 
 // Reply to feedback (universal - для ментора и студента)
 app.post('/api/feedback/reply', authenticate, (req, res) => {
-  console.log('Reply to feedback:', req.body, 'User role:', req.user.role);
+  console.log('=== Reply to feedback ===');
+  console.log('User:', req.user.id, req.user.login, req.user.role);
+  console.log('Request body:', req.body);
+  
   const { to_id, to_name, to_login, original_feedback_id, subject, message } = req.body;
   
-  const original = db.prepare('SELECT * FROM feedback WHERE id = ?').get(original_feedback_id);
-  if (!original) return res.status(404).json({ error: 'Сообщение не найдено' });
-  
-  const result = db.prepare('INSERT INTO feedback (from_user_id, to_user_id, subject, message, parent_id) VALUES (?, ?, ?, ?, ?)').run(
-    req.user.id, to_id || original.from_user_id, subject || 'Re: ' + (original.subject || ''), message, original.id
-  );
-  const reply = db.prepare('SELECT * FROM feedback WHERE id = ?').get(result.lastInsertRowid);
-  
-  // Mark original as read only for mentor replies
-  if (req.user.role === 'mentor') {
-    db.prepare('UPDATE feedback SET is_read = 1 WHERE id = ?').run(original.id);
+  if (!original_feedback_id) {
+    console.error('No original_feedback_id provided');
+    return res.status(400).json({ error: 'original_feedback_id обязателен' });
   }
   
-  console.log('Reply sent:', reply.id);
-  res.status(201).json(reply);
+  const original = db.prepare('SELECT * FROM feedback WHERE id = ?').get(original_feedback_id);
+  if (!original) {
+    console.error('Original message not found:', original_feedback_id);
+    return res.status(404).json({ error: 'Сообщение не найдено' });
+  }
+  console.log('Original message:', original);
+  
+  const targetUserId = to_id || original.from_user_id;
+  console.log('Sending reply to user ID:', targetUserId);
+  
+  try {
+    const result = db.prepare('INSERT INTO feedback (from_user_id, to_user_id, subject, message, parent_id) VALUES (?, ?, ?, ?, ?)').run(
+      req.user.id, targetUserId, subject || 'Re: ' + (original.subject || ''), message, original.id
+    );
+    console.log('Insert result:', result);
+    
+    const reply = db.prepare('SELECT * FROM feedback WHERE id = ?').get(result.lastInsertRowid);
+    console.log('Reply created:', reply);
+    
+    // Mark original as read only for mentor replies
+    if (req.user.role === 'mentor') {
+      db.prepare('UPDATE feedback SET is_read = 1 WHERE id = ?').run(original.id);
+    }
+    
+    console.log('Reply sent successfully:', reply.id);
+    res.status(201).json(reply);
+  } catch (error) {
+    console.error('Error inserting reply:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // ============ Dashboard stats ============
