@@ -110,11 +110,30 @@ function StudentFeedbackPage() {
   };
 
   // Группируем сообщения по треду (оригинал + ответы)
+  // Для ответов с parent_id, который сам имеет parent_id, находим корневое сообщение
   const groupedMessages = messages.reduce((acc, msg) => {
     if (!msg.parent_id) {
+      // Это оригинальное сообщение
       acc[msg.id] = { original: msg, replies: [] };
-    } else if (acc[msg.parent_id]) {
-      acc[msg.parent_id].replies.push(msg);
+    } else {
+      // Это ответ - нужно найти корневое сообщение
+      let rootId = msg.parent_id;
+      // Ищем корень (сообщение без parent_id)
+      let depth = 0;
+      while (depth < 10) {
+        const parent = messages.find(m => m.id === rootId);
+        if (!parent) break;
+        if (!parent.parent_id) break; // Нашли корень
+        rootId = parent.parent_id;
+        depth++;
+      }
+      
+      if (acc[rootId]) {
+        acc[rootId].replies.push(msg);
+      } else {
+        // Если корень не найден, создаём группу с этим сообщением как оригиналом
+        acc[msg.parent_id] = { original: messages.find(m => m.id === msg.parent_id) || msg, replies: [msg] };
+      }
     }
     return acc;
   }, {});
