@@ -68,19 +68,28 @@ function FeedbackPage() {
 
   const handleReply = async (values) => {
     try {
+      console.log('Отправка ответа:', values);
+      
       await api.replyFeedback({
-        to_id: replyingTo.from_id || replyingTo.to_id,
-        to_name: replyingTo.from_name || replyingTo.to_name,
-        to_login: replyingTo.from_login || replyingTo.to_login,
-        original_feedback_id: replyingTo.id,
-        subject: `Re: ${replyingTo.subject || 'Без темы'}`,
+        to_id: values.to_id,
+        to_name: values.to_name,
+        to_login: values.to_login,
+        original_feedback_id: values.original_feedback_id,
+        subject: `Re: ${values.subject || 'Без темы'}`,
         message: values.message
       });
       message.success('Ответ отправлен!');
       setReplyModal({ open: false, message: null });
       setReplyingTo(null);
       replyForm.resetFields();
-      setTimeout(() => fetchConversations(), 300);
+      setTimeout(() => {
+        fetchConversations();
+        // Если были в режиме просмотра переписки - сбрасываем и возвращаемся к списку
+        if (selectedConversation) {
+          setSelectedConversation(null);
+          setActiveTab('inbox');
+        }
+      }, 300);
     } catch (error) {
       console.error('Ошибка отправки ответа:', error);
       const errorMsg = error.response?.data?.error || error.message || 'Ошибка отправки ответа';
@@ -94,6 +103,14 @@ function FeedbackPage() {
     }
     setSelectedConversation(conv);
     setActiveTab('conversation');
+    // Устанавливаем значения в форму
+    replyForm.setFieldsValue({
+      to_id: conv.student?.id,
+      to_name: conv.student?.name,
+      to_login: conv.student?.login,
+      original_feedback_id: conv.original?.id,
+      subject: conv.original?.subject
+    });
   };
 
   const handleCardClick = (item) => {
@@ -195,6 +212,36 @@ function FeedbackPage() {
 
       <Card>
         <Form form={replyForm} onFinish={handleReply} layout="vertical">
+          {/* Скрытые поля с данными студента */}
+          <Form.Item
+            name="to_id"
+            style={{ display: 'none' }}
+            initialValue={selectedConversation.student?.id}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="to_name"
+            style={{ display: 'none' }}
+            initialValue={selectedConversation.student?.name}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="to_login"
+            style={{ display: 'none' }}
+            initialValue={selectedConversation.student?.login}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="original_feedback_id"
+            style={{ display: 'none' }}
+            initialValue={selectedConversation.original?.id}
+          >
+            <Input />
+          </Form.Item>
+          
           <Form.Item
             label="Ваш ответ"
             name="message"
