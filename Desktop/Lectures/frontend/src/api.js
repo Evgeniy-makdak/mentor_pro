@@ -123,5 +123,7 @@ export default {
 
   // Feedback
   getFeedback: () => api.get('/api/feedback'),
-  sendFeedback: (data) => api.post('/api/feedback', data)
+  sendFeedback: (data) => api.post('/api/feedback', data),
+  markFeedbackRead: (id) => api.put(`/api/feedback/${id}/read`),
+  replyFeedback: (data) => api.post('/api/feedback/reply', data)
 };
