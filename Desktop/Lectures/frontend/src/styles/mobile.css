@@ -324,6 +324,32 @@
    ============================================ */
 
 /* ============================================
+   FEEDBACK PAGE
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .feedback-page .ant-list-item {
+    padding: 16px 12px !important;
+  }
+
+  .feedback-page .ant-list-item-meta-title {
+    font-size: 15px !important;
+  }
+
+  .feedback-page .ant-list-item-meta-description {
+    font-size: 13px !important;
+  }
+
+  .feedback-page h2 {
+    font-size: 20px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .feedback-card-unread {
+    background: rgba(24, 144, 255, 0.05) !important;
+  }
+}
+
+/* ============================================
    STUDENT FEEDBACK PAGE
    ============================================ */
 @media screen and (max-width: 768px) {
@@ -344,13 +370,21 @@
     min-height: 48px !important;
     font-size: 16px !important;
   }
+
+  .student-feedback-page .ant-tabs-nav {
+    margin: 0 0 16px 0 !important;
+  }
+
+  .student-feedback-page .ant-tabs-tab {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
 }
 
 /* ============================================
    STUDENT LECTURES PAGE
    ============================================ */
 @media screen and (max-width: 768px) {
-  /* Скрываем заголовок "Лекции" на мобильных */
   .student-lectures-page .ant-typography h4,
   .student-lectures-page .ant-typography .ant-typography-h4 {
     display: none !important;
@@ -364,7 +398,6 @@
     padding: 12px 8px !important;
   }
 
-  /* Заголовок "Материалы" */
   .student-lectures-page .ant-typography strong {
     display: block !important;
     margin-bottom: 8px !important;
@@ -372,12 +405,10 @@
     color: #333 !important;
   }
 
-  /* Контейнер материалов */
   .student-lectures-page .materials-container {
     gap: 8px !important;
   }
 
-  /* Ссылки на файлы - адаптивные карточки */
   .student-lectures-page .material-link {
     display: flex !important;
     width: 100% !important;
@@ -390,19 +421,16 @@
     min-width: auto !important;
   }
 
-  /* Иконка в материале */
   .student-lectures-page .material-link .anticon {
     font-size: 18px !important;
     flex-shrink: 0 !important;
   }
 
-  /* Название файла */
   .student-lectures-page .material-link span {
     font-size: 14px !important;
     word-break: break-word !important;
   }
 
-  /* На очень маленьких экранах */
   @media screen and (max-width: 375px) {
     .student-lectures-page .material-link {
       padding: 10px 12px !important;
@@ -410,7 +438,6 @@
     }
   }
 
-  /* Кнопка "Перейти к тесту" */
   .student-lectures-page .ant-btn-primary {
     width: 100% !important;
     margin-top: 12px !important;
@@ -453,12 +480,10 @@
     width: 100% !important;
   }
 
-  /* Материалы лекций */
   .lectures-page .ant-table-column-sorters {
     padding: 8px 4px !important;
   }
 
-  /* Кнопки действий в таблицах */
   .ant-space-compact {
     flex-wrap: wrap !important;
     gap: 4px !important;
@@ -530,30 +555,12 @@
     width: 100% !important;
   }
 
-  /* Карточки отчётов */
   .report-card .ant-card-body {
     padding: 16px 12px !important;
   }
   
   .reports-page .ant-form-item {
     margin-bottom: 8px !important;
-  }
-}
-
-/* ============================================
-   FEEDBACK PAGE
-   ============================================ */
-@media screen and (max-width: 768px) {
-  .feedback-page .ant-list-item {
-    padding: 16px 12px !important;
-  }
-
-  .feedback-page .ant-list-item-meta-title {
-    font-size: 15px !important;
-  }
-
-  .feedback-page .ant-list-item-meta-description {
-    font-size: 13px !important;
   }
 }
 
@@ -608,7 +615,6 @@
     line-height: 1.4 !important;
   }
   
-  /* Поля ввода в модалках */
   .ant-modal .ant-form-item {
     margin-bottom: 16px !important;
   }
@@ -622,7 +628,7 @@
 }
 
 /* ============================================
-   DRAWER (для мобильных меню)
+   DRAWER
    ============================================ */
 @media screen and (max-width: 768px) {
   .ant-drawer-body {
@@ -636,13 +642,16 @@
 @media screen and (max-width: 768px) {
   .ant-message {
     max-width: calc(100% - 32px) !important;
-    left: 16px !important;
-    right: 16px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    text-align: center !important;
   }
 
   .ant-message-notice-content {
     font-size: 14px !important;
     padding: 12px 16px !important;
+    display: inline-block !important;
   }
 
   .ant-notification {
@@ -765,7 +774,7 @@
 }
 
 /* ============================================
-   TABLE ACTIONS НА МОБИЛЬНЫХ
+   TABLE ACTIONS
    ============================================ */
 @media screen and (max-width: 768px) {
   .ant-table-tbody > tr > td:last-child {
@@ -800,7 +809,7 @@
 }
 
 /* ============================================
-   SPLITTER / RESIZABLE PANELS
+   SPLITTER
    ============================================ */
 @media screen and (max-width: 768px) {
   .ant-splitter {
@@ -809,7 +818,7 @@
 }
 
 /* ============================================
-   SAFE AREA FOR NOTCH DEVICES
+   SAFE AREA
    ============================================ */
 @supports (padding: max(0px)) {
   @media screen and (max-width: 768px) {
@@ -831,7 +840,7 @@
 }
 
 /* ============================================
-   LANDSCAPE MODE FOR MOBILE
+   LANDSCAPE MODE
    ============================================ */
 @media screen and (max-width: 768px) and (orientation: landscape) {
   .ant-layout-content {
@@ -841,7 +850,7 @@
 }
 
 /* ============================================
-   VERY SMALL SCREENS (< 375px)
+   VERY SMALL SCREENS
    ============================================ */
 @media screen and (max-width: 375px) {
   .ant-btn {
@@ -866,7 +875,7 @@
 }
 
 /* ============================================
-   TABLET (768px - 1024px)
+   TABLET
    ============================================ */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
   .ant-layout-content {
@@ -884,7 +893,7 @@
 }
 
 /* ============================================
-   PRINT STYLES
+   PRINT
    ============================================ */
 @media print {
   .ant-layout-sider,

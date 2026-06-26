@@ -1,0 +1,56 @@
+.student-feedback-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.student-feedback-page .ant-tabs {
+  margin-top: 16px;
+}
+
+.conversation-view {
+  max-width: 800px;
+}
+
+/* Стили для мобильных */
+@media screen and (max-width: 768px) {
+  .student-feedback-page .ant-card {
+    padding: 16px !important;
+  }
+
+  .student-feedback-page .ant-form-item-label > label {
+    font-size: 15px !important;
+  }
+
+  .student-feedback-page .ant-input,
+  .student-feedback-page .ant-input-textarea {
+    font-size: 16px !important;
+  }
+
+  .student-feedback-page .ant-btn {
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+
+  .student-feedback-page h4 {
+    font-size: 20px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .student-feedback-page .ant-tabs-nav {
+    margin: 0 0 16px 0 !important;
+  }
+
+  .student-feedback-page .ant-tabs-tab {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+
+  .conversation-view .ant-card {
+    padding: 12px !important;
+  }
+
+  .conversation-view .ant-btn {
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+}

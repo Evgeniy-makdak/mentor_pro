@@ -1,0 +1,51 @@
+.feedback-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feedback-card-unread {
+  animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 2px 16px rgba(24, 144, 255, 0.3);
+  }
+}
+
+.conversation-view {
+  max-width: 800px;
+}
+
+/* Стили для мобильных */
+@media screen and (max-width: 768px) {
+  .feedback-page h2 {
+    font-size: 20px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .ant-tabs-nav {
+    margin: 0 0 16px 0 !important;
+  }
+
+  .ant-tabs-tab {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+
+  .feedback-card-unread {
+    background: rgba(24, 144, 255, 0.05) !important;
+  }
+
+  .conversation-view .ant-card {
+    padding: 12px !important;
+  }
+
+  .conversation-view .ant-btn {
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+}
