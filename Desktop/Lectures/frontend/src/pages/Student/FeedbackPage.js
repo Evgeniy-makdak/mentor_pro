@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Typography, Form, Input, Button, message, List, Empty, Tag, Divider } from 'antd';
+import { Card, Typography, Form, Input, Button, message, List, Empty, Tag, Divider, Modal } from 'antd';
 import { useAuth } from '../../AuthContext';
 import api from '../../api';
 import './FeedbackPage.css';
@@ -11,6 +11,9 @@ function StudentFeedbackPage() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [replyModal, setReplyModal] = useState({ open: false, message: null });
+  const [replyForm] = Form.useForm();
+  const [replyingTo, setReplyingTo] = useState(null);
   const { user } = useAuth();
 
   const fetchMessages = async () => {
@@ -31,6 +34,29 @@ function StudentFeedbackPage() {
   useEffect(() => {
     fetchMessages();
   }, []);
+
+  const handleReply = async (values) => {
+    try {
+      setLoading(true);
+      await api.replyFeedback({
+        to_id: replyingTo.from_user_id,
+        to_name: replyingTo.from_name,
+        to_login: replyingTo.from_login,
+        original_feedback_id: replyingTo.id,
+        subject: `Re: ${replyingTo.subject || 'Без темы'}`,
+        message: values.message
+      });
+      message.success('Ответ отправлен!');
+      setReplyModal({ open: false, message: null });
+      setReplyingTo(null);
+      replyForm.resetFields();
+      setTimeout(() => fetchMessages(), 500);
+    } catch (error) {
+      message.error('Ошибка отправки ответа');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (values) => {
     try {
@@ -75,6 +101,11 @@ function StudentFeedbackPage() {
   const sortedThreads = Object.values(groupedMessages).sort((a, b) => 
     new Date(b.original.created_at) - new Date(a.original.created_at)
   );
+
+  const handleReplyClick = (msg) => {
+    setReplyingTo(msg);
+    setReplyModal({ open: true });
+  };
 
   return (
     <div className="student-feedback-page">
@@ -149,6 +180,16 @@ function StudentFeedbackPage() {
                     </div>
                   )}
                   <div>{thread.original.message}</div>
+                  {thread.replies.length > 0 && (
+                    <Button 
+                      type="link" 
+                      size="small" 
+                      onClick={() => handleReplyClick(thread.replies[thread.replies.length - 1])}
+                      style={{ marginTop: 8, paddingLeft: 0 }}
+                    >
+                      ↩ Ответить
+                    </Button>
+                  )}
                 </div>
                 
                 {/* Ответы ментора */}
@@ -164,6 +205,14 @@ function StudentFeedbackPage() {
                       <Text type="secondary">{formatDate(reply.created_at)}</Text>
                     </div>
                     {reply.message}
+                    <Button 
+                      type="link" 
+                      size="small" 
+                      onClick={() => handleReplyClick(reply)}
+                      style={{ marginTop: 8, paddingLeft: 0 }}
+                    >
+                      ↩ Ответить
+                    </Button>
                   </div>
                 ))}
               </Card>
@@ -171,6 +220,52 @@ function StudentFeedbackPage() {
           )}
         />
       )}
+
+      {/* Модальное окно ответа */}
+      <Modal
+        title={`Ответ: ${replyingTo?.from_name}`}
+        open={replyModal.open}
+        onCancel={() => {
+          setReplyModal({ open: false, message: null });
+          setReplyingTo(null);
+          replyForm.resetFields();
+        }}
+        footer={null}
+        width={600}
+      >
+        {replyingTo && (
+          <div>
+            <div style={{ marginBottom: 16, padding: 12, background: '#f5f5f5', borderRadius: 6 }}>
+              <Text strong>От: {replyingTo.from_name}</Text>
+              {replyingTo.subject && <div style={{ marginTop: 4 }}>Тема: {replyingTo.subject}</div>}
+              <div style={{ marginTop: 4 }}>{replyingTo.message}</div>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                {formatDate(replyingTo.created_at)}
+              </Text>
+            </div>
+
+            <Form form={replyForm} onFinish={handleReply} layout="vertical">
+              <Form.Item
+                label="Ваш ответ"
+                name="message"
+                rules={[{ required: true, message: 'Введите ответ' }]}
+              >
+                <TextArea
+                  rows={6}
+                  placeholder="Напишите ответ..."
+                  style={{ resize: 'vertical' }}
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Button type="primary" htmlType="submit" block size="large">
+                  Отправить ответ
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

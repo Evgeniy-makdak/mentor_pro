@@ -108,15 +108,20 @@ function FeedbackPage() {
     }
     setSelectedConversation(conv);
     setActiveTab('conversation');
-    // Устанавливаем значения в форму
-    replyForm.setFieldsValue({
-      to_id: conv.student?.id,
-      to_name: conv.student?.name,
-      to_login: conv.student?.login,
-      original_feedback_id: conv.original?.id,
-      subject: conv.original?.subject
-    });
   };
+
+  // Обновляем форму при изменении selectedConversation
+  useEffect(() => {
+    if (selectedConversation) {
+      replyForm.setFieldsValue({
+        to_id: selectedConversation.student?.id,
+        to_name: selectedConversation.student?.name,
+        to_login: selectedConversation.student?.login,
+        original_feedback_id: selectedConversation.original?.id,
+        subject: selectedConversation.original?.subject
+      });
+    }
+  }, [selectedConversation, replyForm]);
 
   const handleCardClick = (item) => {
     if (item.is_read === 0) {
@@ -218,32 +223,16 @@ function FeedbackPage() {
       <Card>
         <Form form={replyForm} onFinish={handleReply} layout="vertical">
           {/* Скрытые поля с данными студента */}
-          <Form.Item
-            name="to_id"
-            style={{ display: 'none' }}
-            initialValue={selectedConversation.student?.id}
-          >
+          <Form.Item name="to_id" style={{ display: 'none' }}>
             <Input />
           </Form.Item>
-          <Form.Item
-            name="to_name"
-            style={{ display: 'none' }}
-            initialValue={selectedConversation.student?.name}
-          >
+          <Form.Item name="to_name" style={{ display: 'none' }}>
             <Input />
           </Form.Item>
-          <Form.Item
-            name="to_login"
-            style={{ display: 'none' }}
-            initialValue={selectedConversation.student?.login}
-          >
+          <Form.Item name="to_login" style={{ display: 'none' }}>
             <Input />
           </Form.Item>
-          <Form.Item
-            name="original_feedback_id"
-            style={{ display: 'none' }}
-            initialValue={selectedConversation.original?.id}
-          >
+          <Form.Item name="original_feedback_id" style={{ display: 'none' }}>
             <Input />
           </Form.Item>
           
