@@ -20,6 +20,15 @@
   max-width: 800px;
 }
 
+/* Кнопка удаления */
+.feedback-page .ant-card-actions {
+  border-top: none !important;
+}
+
+.feedback-page .ant-card-actions li {
+  margin: 0 !important;
+}
+
 /* Стили для мобильных */
 @media screen and (max-width: 768px) {
   .feedback-page h2 {
@@ -47,5 +56,15 @@
   .conversation-view .ant-btn {
     width: 100% !important;
     margin-bottom: 12px !important;
+  }
+
+  .conversation-view .ant-space {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .conversation-view .ant-space-item {
+    width: 100% !important;
   }
 }

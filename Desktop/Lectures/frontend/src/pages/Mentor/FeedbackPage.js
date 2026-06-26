@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { List, Card, Typography, Tag, Empty, Button, Modal, Form, Input, message, Badge, Tabs } from 'antd';
+import { List, Card, Typography, Tag, Empty, Button, Modal, Form, Input, message, Badge, Tabs, Popconfirm } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import { useAuth } from '../../AuthContext';
 import api from '../../api';
 import './FeedbackPage.css';
@@ -122,6 +123,23 @@ function FeedbackPage() {
     setActiveTab('conversation');
   };
 
+  const handleDeleteConversation = async (studentId, studentName) => {
+    try {
+      await api.deleteConversation(studentId);
+      message.success(`Переписка с ${studentName} удалена`);
+      // Сбрасываем текущую переписку если удалили её
+      if (selectedConversation?.student?.id === studentId) {
+        setSelectedConversation(null);
+        setActiveTab('inbox');
+      }
+      // Обновляем список
+      fetchConversations();
+    } catch (error) {
+      console.error('Ошибка удаления переписки:', error);
+      message.error('Ошибка при удалении переписки');
+    }
+  };
+
   // Обновляем форму при изменении selectedConversation
   useEffect(() => {
     if (selectedConversation) {
@@ -168,6 +186,30 @@ function FeedbackPage() {
             }}
             hoverable
             className={conv.unread ? 'feedback-card-unread' : ''}
+            actions={[
+              <Popconfirm
+                key="delete"
+                title={`Удалить переписку с ${conv.student.name}?`}
+                description="Все сообщения будут удалены безвозвратно"
+                onConfirm={(e) => {
+                  e?.stopPropagation();
+                  handleDeleteConversation(conv.student.id, conv.student.name);
+                }}
+                onCancel={(e) => e?.stopPropagation()}
+                okText="Удалить"
+                cancelText="Отмена"
+                okButtonProps={{ danger: true }}
+              >
+                <Button 
+                  type="text" 
+                  danger 
+                  icon={<DeleteOutlined />}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Удалить
+                </Button>
+              </Popconfirm>
+            ]}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
               <div>
@@ -196,9 +238,23 @@ function FeedbackPage() {
 
   const conversationTab = selectedConversation ? (
     <div className="conversation-view">
-      <Button onClick={() => setActiveTab('inbox')} style={{ marginBottom: 16 }}>
-        ← Назад к списку
-      </Button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <Button onClick={() => setActiveTab('inbox')}>
+          ← Назад к списку
+        </Button>
+        <Popconfirm
+          title={`Удалить переписку с ${selectedConversation.student.name}?`}
+          description="Все сообщения будут удалены безвозвратно"
+          onConfirm={() => handleDeleteConversation(selectedConversation.student.id, selectedConversation.student.name)}
+          okText="Удалить"
+          cancelText="Отмена"
+          okButtonProps={{ danger: true }}
+        >
+          <Button danger icon={<DeleteOutlined />}>
+            Удалить переписку
+          </Button>
+        </Popconfirm>
+      </div>
       
       <Card style={{ marginBottom: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
