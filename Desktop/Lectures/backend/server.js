@@ -1170,9 +1170,9 @@ app.put('/api/feedback/:id/read', authenticate, (req, res) => {
   res.json({ success: true });
 });
 
-// Reply to feedback (mentor)
-app.post('/api/feedback/reply', authenticate, requireMentor, (req, res) => {
-  console.log('Reply to feedback (mentor):', req.body);
+// Reply to feedback (universal - для ментора и студента)
+app.post('/api/feedback/reply', authenticate, (req, res) => {
+  console.log('Reply to feedback:', req.body, 'User role:', req.user.role);
   const { to_id, to_name, to_login, original_feedback_id, subject, message } = req.body;
   
   const original = db.prepare('SELECT * FROM feedback WHERE id = ?').get(original_feedback_id);
@@ -1183,27 +1183,12 @@ app.post('/api/feedback/reply', authenticate, requireMentor, (req, res) => {
   );
   const reply = db.prepare('SELECT * FROM feedback WHERE id = ?').get(result.lastInsertRowid);
   
-  // Mark original as read
-  db.prepare('UPDATE feedback SET is_read = 1 WHERE id = ?').run(original.id);
+  // Mark original as read only for mentor replies
+  if (req.user.role === 'mentor') {
+    db.prepare('UPDATE feedback SET is_read = 1 WHERE id = ?').run(original.id);
+  }
   
   console.log('Reply sent:', reply.id);
-  res.status(201).json(reply);
-});
-
-// Reply to feedback (student)
-app.post('/api/feedback/reply', authenticate, (req, res) => {
-  console.log('Reply to feedback (student):', req.body);
-  const { to_id, to_name, to_login, original_feedback_id, subject, message } = req.body;
-  
-  const original = db.prepare('SELECT * FROM feedback WHERE id = ?').get(original_feedback_id);
-  if (!original) return res.status(404).json({ error: 'Сообщение не найдено' });
-  
-  const result = db.prepare('INSERT INTO feedback (from_user_id, to_user_id, subject, message, parent_id) VALUES (?, ?, ?, ?, ?)').run(
-    req.user.id, to_id || original.from_user_id, subject || 'Re: ' + (original.subject || ''), message, original.id
-  );
-  const reply = db.prepare('SELECT * FROM feedback WHERE id = ?').get(result.lastInsertRowid);
-  
-  console.log('Student reply sent:', reply.id);
   res.status(201).json(reply);
 });
 
