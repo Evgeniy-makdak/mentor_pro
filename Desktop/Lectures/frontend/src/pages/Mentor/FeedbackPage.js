@@ -60,17 +60,10 @@ function FeedbackPage() {
       setConversations(prev => prev.map(conv => 
         conv.id === messageId ? { ...conv, unread: false } : conv
       ));
-    } catch {
-      message.error('Ошибка при отметке');
+    } catch (error) {
+      console.error('Ошибка при отметке прочитанным:', error);
+      // Не показываем ошибку пользователю, так как это фоновая операция
     }
-  };
-
-  const handleConversationClick = (conv) => {
-    if (conv.unread && conv.original) {
-      markAsRead(conv.original.id);
-    }
-    setSelectedConversation(conv);
-    setActiveTab('conversation');
   };
 
   const handleReply = async (values) => {
@@ -89,8 +82,18 @@ function FeedbackPage() {
       replyForm.resetFields();
       setTimeout(() => fetchConversations(), 300);
     } catch (error) {
-      message.error('Ошибка отправки ответа');
+      console.error('Ошибка отправки ответа:', error);
+      const errorMsg = error.response?.data?.error || error.message || 'Ошибка отправки ответа';
+      message.error(errorMsg);
     }
+  };
+
+  const handleConversationClick = (conv) => {
+    if (conv.unread && conv.original) {
+      markAsRead(conv.original.id);
+    }
+    setSelectedConversation(conv);
+    setActiveTab('conversation');
   };
 
   const handleCardClick = (item) => {
