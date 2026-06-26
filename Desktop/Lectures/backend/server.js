@@ -1172,7 +1172,7 @@ app.put('/api/feedback/:id/read', authenticate, (req, res) => {
 
 // Reply to feedback (mentor)
 app.post('/api/feedback/reply', authenticate, requireMentor, (req, res) => {
-  console.log('Reply to feedback:', req.body);
+  console.log('Reply to feedback (mentor):', req.body);
   const { to_id, to_name, to_login, original_feedback_id, subject, message } = req.body;
   
   const original = db.prepare('SELECT * FROM feedback WHERE id = ?').get(original_feedback_id);
@@ -1187,6 +1187,23 @@ app.post('/api/feedback/reply', authenticate, requireMentor, (req, res) => {
   db.prepare('UPDATE feedback SET is_read = 1 WHERE id = ?').run(original.id);
   
   console.log('Reply sent:', reply.id);
+  res.status(201).json(reply);
+});
+
+// Reply to feedback (student)
+app.post('/api/feedback/reply', authenticate, (req, res) => {
+  console.log('Reply to feedback (student):', req.body);
+  const { to_id, to_name, to_login, original_feedback_id, subject, message } = req.body;
+  
+  const original = db.prepare('SELECT * FROM feedback WHERE id = ?').get(original_feedback_id);
+  if (!original) return res.status(404).json({ error: 'Сообщение не найдено' });
+  
+  const result = db.prepare('INSERT INTO feedback (from_user_id, to_user_id, subject, message, parent_id) VALUES (?, ?, ?, ?, ?)').run(
+    req.user.id, to_id || original.from_user_id, subject || 'Re: ' + (original.subject || ''), message, original.id
+  );
+  const reply = db.prepare('SELECT * FROM feedback WHERE id = ?').get(result.lastInsertRowid);
+  
+  console.log('Student reply sent:', reply.id);
   res.status(201).json(reply);
 });
 
