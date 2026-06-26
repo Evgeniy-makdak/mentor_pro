@@ -1215,6 +1215,30 @@ app.post('/api/feedback/reply', authenticate, (req, res) => {
   }
 });
 
+// Delete conversation (mentor only)
+app.delete('/api/feedback/conversation/:studentId', authenticate, requireMentor, (req, res) => {
+  console.log('Delete conversation with student:', req.params.studentId);
+  const studentId = parseInt(req.params.studentId);
+  
+  if (!studentId) {
+    return res.status(400).json({ error: 'studentId обязателен' });
+  }
+  
+  try {
+    // Удаляем все сообщения в переписке с этим студентом
+    const result = db.prepare(`
+      DELETE FROM feedback 
+      WHERE (from_user_id = ? AND to_user_id = ?) OR (from_user_id = ? AND to_user_id = ?)
+    `).run(studentId, req.user.id, req.user.id, studentId);
+    
+    console.log('Deleted messages:', result.changes);
+    res.json({ success: true, deleted: result.changes });
+  } catch (error) {
+    console.error('Error deleting conversation:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ============ Dashboard stats ============
 app.get('/api/dashboard', authenticate, requireMentor, (req, res) => {
   const totalStudents = db.prepare('SELECT COUNT(*) as cnt FROM users WHERE role = ?').get('student').cnt;
